@@ -9,9 +9,9 @@
 - [x] Vaibhav Pandey
 
 ### Agenda
-- [ ] Decide priority level for different screens
-- [ ] Assign task to team members
-- [ ] Create action items for next Milestone
+- [x] Decide priority level for different screens
+- [x] Assign task to team members
+- [x] Create action items for next Milestone
 
 ### Notes
 1. We will try to finish the project before Oct 17th but if we are not satified with the progress we will make this our second project as well.
