@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container" style="margin-top:25px;">
+        <div class="row text-right">
+            <div class="col-sm-12">
+                <button id="btnLogAuth" type="button" class="btn btn-primary">Log In</button>
+                <h5 id="userNameDisplay" class="d-none">User: <span id="username"></span></h5>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+            <div class="col-sm-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Event 123</h5>
+                        <p class="card-text">Some cool planting event 123</p>
+                        <a href="#" class="card-link" event-id="123">Register</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Event 234</h5>
+                        <p class="card-text">Some cool planting event 234</p>
+                        <a href="#" class="card-link" event-id="234">Register</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Event 345</h5>
+                        <p class="card-text">Some cool planting event 345</p>
+                        <a href="#" class="card-link" event-id="345">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Modal -->
+        <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Registration</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Guarantee your spot!</p>
+                        <form>
+                            <div class="form-group">
+                                <label for="userEmail">Name:</label>
+                                <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                                <label for="userEmail">Email:</label>
+                                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                                    placeholder="Enter email">
+                                <div class='d-none invalid-feedback'>You must use a valid email!</div>
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with
+                                    anyone else.</small>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="emailReminderOn">
+                                <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
+                            </div>                            
+                            <div class="row text-center">
+                                <div class="col-sm-12">
+                                    <button id="submitRegistration" type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Modal -->
+        <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Sign Up</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="firebaseui-auth-container" class="modal-body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+
+    <!-- Additional services that will be used -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <!-- App -->
+    <script src="../main.js"></script>
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
+    <script type="text/javascript">
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: 'user-events-demo.html',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                // firebase.auth.FacebookAuthProvider.PROVIDER_ID,                
+                firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            ],
+            // tosUrl and privacyPolicyUrl accept either url string or a callback
+            // function.
+            // Terms of service url/callback.
+            tosUrl: '<your-tos-url>',
+            // Privacy policy url/callback.
+            privacyPolicyUrl: function () {
+                // TODO: Privacy callback
+                window.location.assign('<your-privacy-policy-url>');
+            }
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+
+    <script>
+
+        var userLoggedIn = false;
+        $("#btnLogAuth").on('click', function(){
+            if (userLoggedIn){
+                firebase.auth().signOut();
+            }
+            else{
+                $("#signUpModal").modal('show');
+            }
+        })
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (user){
+                console.log(user);
+                $("#btnLogAuth").text("Log Out");
+                $("#username").text(user.displayName);
+                $("#userNameDisplay").removeClass("d-none");
+                userLoggedIn = true;
+            }
+            else{
+                $("#username").text("");
+                $("#userNameDisplay").addClass("d-none");
+                $("#btnLogAuth").text("Log In");
+                userLoggedIn = false;
+            }
+        });
+
+        var registrationModal = $("#registrationModal");
+        var eventId = 0;
+        $(".card-link").on('click', function () {
+            eventId = $(this).attr("event-id");
+            registrationModal.modal('show');
+        });
+
+        $("#submitRegistration").on('click', async function(){
+            const emailElement = $("#userEmail");
+            const email = emailElement.val();
+            var validEmail = await isValidEmail(email);
+            
+            if (validEmail){
+                $(".invalid-feedback").addClass("d-none");
+
+                // Create user
+                const name = $("#userName").val();
+                const notificationsOn = $("#emailReminderOn").is(":checked");
+                const user = new User(email, name, notificationsOn);
+
+                firebaseDB.createUser(user);
+                firebaseDB.registerUserForEvent(email, eventId);
+
+                emailElement.val("");
+                $("#userName").val("");
+
+                registrationModal.modal('hide');
+            }
+            else{
+                emailElement.addClass("is-invalid");
+                $(".d-none").removeClass("d-none");
+            }
+        });
+
+        async function demo(){
+            var email = "germanp173@gmail.com";
+
+            console.log("user: " + email);
+            var t = await firebaseDB.userExists(email);
+            console.log("User Exists: " + t);
+
+            var a = await firebaseDB.getUserEvents(email);
+            console.log("User Attending These Events: " + a);
+
+            var s = await firebaseDB.isUserRegisteredForEvent(email, "345");
+            console.log("Registered is registered for event 345: " + s);
+        }
+        
+        demo();    
+
+    </script>
+</body>
+</html>
