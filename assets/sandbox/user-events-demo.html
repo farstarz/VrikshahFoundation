@@ -106,6 +106,24 @@
                 </div>
             </div>
         </div>
+
+        <!-- User Registered Modal -->
+        <div class="modal fade" id="registeredModal" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Registration</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h3>Successfully Registered!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase App is always required and must be first -->
@@ -114,6 +132,7 @@
     <!-- Additional services that will be used -->
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-functions.js"></script>
 
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
@@ -155,6 +174,7 @@
     <script>
 
         var userLoggedIn = false;
+        var currentUser = null;
         $("#btnLogAuth").on('click', function(){
             if (userLoggedIn){
                 firebase.auth().signOut();
@@ -164,19 +184,28 @@
             }
         })
 
-        firebase.auth().onAuthStateChanged(user => {
+        firebase.auth().onAuthStateChanged(async user => {
             if (user){
-                console.log(user);
+                console.log("State Change");
                 $("#btnLogAuth").text("Log Out");
                 $("#username").text(user.displayName);
                 $("#userNameDisplay").removeClass("d-none");
                 userLoggedIn = true;
+                
+                currentUser = new User(user.email, user.displayName, true);
+                var userExits = await firebaseDB.userExists(currentUser.email);
+                if (!userExits){
+                    // TODO: This should be in a firebase auth on create trigger. Need to figure out how to do this.
+                    firebaseDB.createUser(currentUser);
+                    console.log("New User Created: " + currentUser.email);
+                }
             }
             else{
                 $("#username").text("");
                 $("#userNameDisplay").addClass("d-none");
                 $("#btnLogAuth").text("Log In");
                 userLoggedIn = false;
+                currentUser = null;
             }
         });
 
@@ -184,7 +213,13 @@
         var eventId = 0;
         $(".card-link").on('click', function () {
             eventId = $(this).attr("event-id");
-            registrationModal.modal('show');
+            if (userLoggedIn){
+                firebaseDB.registerUserForEvent(currentUser.email, eventId);
+                console.log("User registered: ", currentUser.email);
+                $("#registeredModal").modal('show');
+            }else{
+                registrationModal.modal('show');
+            }
         });
 
         $("#submitRegistration").on('click', async function(){
@@ -198,10 +233,8 @@
                 // Create user
                 const name = $("#userName").val();
                 const notificationsOn = $("#emailReminderOn").is(":checked");
-                const user = new User(email, name, notificationsOn);
-
-                firebaseDB.createUser(user);
-                firebaseDB.registerUserForEvent(email, eventId);
+                
+                firebaseDB.registerUserForEvent(email, eventId);                
 
                 emailElement.val("");
                 $("#userName").val("");
@@ -228,8 +261,8 @@
             console.log("Registered is registered for event 345: " + s);
         }
         
-        demo();    
-
+        demo();
+    
     </script>
 </body>
 </html>

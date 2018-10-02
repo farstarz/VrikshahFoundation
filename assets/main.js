@@ -9,6 +9,7 @@ var config = {
 };
 firebase.initializeApp(config);
 
+// Database root objects
 var usersRootObj = "users";
 var userEventsRootObj  = "userEvents";
 var eventsRootObj = "events";
@@ -29,13 +30,15 @@ function Event(date, description) {
 
 var firebaseDB = {
 
-    // TODO: Need to add error handling for database transactions.
+    // TODO: 
+    // 1. Need to add error handling for database transactions.
+    // 2. Need to add firebase functions for user on create and on delete triggers.
 
     DB: firebase.database(),
 
     encodeAsFirebaseKey: function(string){
         // Used to encode an email into a valid Firebase key.
-        // This key will be used to quickly query for existing users through their emails.
+        // This key will be used to quickly query for existing users using their emails.
         return string.replace(/\%/g, '%25')
         .replace(/\./g, '%2E')
         .replace(/\#/g, '%23')
@@ -46,7 +49,7 @@ var firebaseDB = {
     },
 
     createUser: function(user){
-        var userId = this.encodeAsFirebaseKey(user.email);
+        var userId = this.encodeAsFirebaseKey(user.email);        
         this.DB.ref(usersRootObj).child(userId).set(user);  
     },
 
@@ -88,7 +91,7 @@ var firebaseDB = {
 }
 
 async function isValidEmail(email) {
-    // Verify email using the Pozzad Email Validator API
+    // Verify email using the Pozzad Email Validator API.
     var queryURL = "https://pozzad-email-validator.p.mashape.com/emailvalidator/validateEmail/" + email;
 
     var response = await $.ajax({
