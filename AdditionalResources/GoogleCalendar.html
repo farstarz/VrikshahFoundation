@@ -98,11 +98,25 @@
         pre.appendChild(textContent);
       }
 
+      // add extended properties for attendies for each event
+      function addExtendedProp(){
+        googlecalendar.patchEvents({
+          'calendarId': 'ucdavis.edu_e2l41vvrob11nsh5puj766msrg@group.calendar.google.com',
+          "extendedProperties": {
+            "private": {
+                "attendies": []
+            }
+          }
+        })
+      }
+      addExtendedProp();
+      
       /**
        * Print the summary and start datetime/date of the next ten events in
        * the authorized user's calendar. If no events are found an
        * appropriate message is printed.
        */
+       
       function listUpcomingEvents() {
         gapi.client.calendar.events.list({
           'calendarId': 'ucdavis.edu_e2l41vvrob11nsh5puj766msrg@group.calendar.google.com',
@@ -114,8 +128,14 @@
         }).then(function(response) {
           var events = response.result.items;
           //appendPre('Upcoming events:');
-          console.log(response);
-
+          // console.log(response);
+          events.forEach(element => {
+            element.attendees.forEach(item=>{
+              console.log(item.email);
+            });
+          });
+      
+            // console.log(events.attendees);
           if (events.length > 0) {
             for (i = 0; i < events.length; i++) {
               var event = events[i];
