@@ -34,7 +34,6 @@
     <link rel='stylesheet' href='../main.css' />
     <script src='fullcalendar-3.9.0/lib/moment.min.js'></script>
     <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
-    <button id="set-events-btn">Set Events</button>
     <div id='calendar'></div>
   
     <script>
@@ -48,26 +47,20 @@
                 // alert('Event: ' + calEvent.title);
                 // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
                 // alert('View: ' + view.name);
-            } 
-        })
-
-        $("#set-events-btn").on("click", function() {
-            console.log("button clicked");
-            $('#calendar').fullCalendar("updateEvents", 
-                [
-                    {
-                    title: 'Tree Preparation',
-                    start: '2018-10-07T13:00:00.008',
-                    end: '2018-10-07T13:30:00.008'
-                    },
-                    {
-                    title: 'New Delhi Tree Planting',
-                    start: '2018-10-07T14:00:00-0400',
-                    end: '2018-10-07T14:30:00-0400'
-                    }
-                ]
-            );
-        });
+            },
+            events: [
+                        {
+                        title: 'Tree Preparation',
+                        start: '2018-10-07T13:00:00.008',
+                        end: '2018-10-07T13:30:00.008'
+                        },
+                        {
+                        title: 'New Delhi Tree Planting',
+                        start: '2018-10-07T14:00:00-0400',
+                        end: '2018-10-07T14:30:00-0400'
+                        }
+                    ]
+        })                 
     });
     
     </script>
