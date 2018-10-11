@@ -29,6 +29,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <!-- FullCalendar -->
     <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
     <link rel='stylesheet' href='../main.css' />
@@ -36,34 +41,36 @@
     <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
     <div id='calendar'></div>
   
-    <script>
-    $(function() {         
-        
-        $('#calendar').fullCalendar({    
-            // defaultView: 'listWeek',
-            eventClick: function(calEvent, jsEvent, view) {
-                console.log(calEvent.title); 
-                console.log(calEvent);
-                // alert('Event: ' + calEvent.title);
-                // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-                // alert('View: ' + view.name);
-            },
-            events: [
-                        {
-                        title: 'Tree Preparation',
-                        start: '2018-10-07T13:00:00.008',
-                        end: '2018-10-07T13:30:00.008'
-                        },
-                        {
-                        title: 'New Delhi Tree Planting',
-                        start: '2018-10-07T14:00:00-0400',
-                        end: '2018-10-07T14:30:00-0400'
-                        }
-                    ]
-        })                 
-    });
-    
-    </script>
+    <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <h1 id="event-title">Title</h1>
+            <p id="start-time">Start</p>
+            <p id="description">Description</p>
+            <div class="form-group">
+                    <label for="userEmail">Name:</label>
+                    <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                        placeholder="Enter email">
+                    <div class='d-none invalid-feedback'>You must use a valid email!</div>
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with
+                        anyone else.</small>
+                </div>
+                <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="emailReminderOn">
+                        <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
+                    </div>                            
+                    <div class="row text-center">
+                        <div class="col-sm-12">
+                            <button id="submitRegistration" type="button" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="calendar-new.js"></script>
    
 </body>
 </html>
