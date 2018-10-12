@@ -6,8 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
+  
 </head>
 
 <body>
@@ -30,47 +29,94 @@
         crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+   crossorigin="anonymous">
+
+  
 
     <!-- FullCalendar -->
     <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
     <link rel='stylesheet' href='../main.css' />
     <script src='fullcalendar-3.9.0/lib/moment.min.js'></script>
     <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    
+
+    <button id="admin-add-event-btn" type="button">Add New Event (Admin Only()</button>
     <div id='calendar'></div>
   
     <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-            <h1 id="event-title">Title</h1>
-            <p id="start-time">Start</p>
-            <p id="description">Description</p>
-            <div class="form-group">
-                    <label for="userEmail">Name:</label>
-                    <input type="text" class="form-control" id="userName" placeholder="Enter your name">
-                    <label for="userEmail">Email:</label>
-                    <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                        placeholder="Enter email">
-                    <div class='d-none invalid-feedback'>You must use a valid email!</div>
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with
-                        anyone else.</small>
+                <h1 id="event-title">Title</h1>
+                <p id="start-time">Start</p>
+                <p id="description">Description</p>
+                <div class="form-group">
+                        <label for="userEmail">Name:</label>
+                        <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                        <label for="userEmail">Email:</label>
+                        <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
+                            placeholder="Enter email">
+                        <div class='d-none invalid-feedback'>You must use a valid email!</div>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with
+                            anyone else.</small>
                 </div>
                 <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="emailReminderOn">
-                        <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
-                    </div>                            
+                    <input type="checkbox" class="form-check-input" id="emailReminderOn">
+                    <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
+                </div>                            
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <button id="modal-btn" type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Dialog for creating new event (admin only) -->
+    <div id="eventModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <h2 class="m-3">Create New Event</h2>
+                <div class="form-group">
+                    <label for="title">Event Title:</label>
+                    <input type="text" class="form-control" id="new-event-title">
+                </div>
+                <div class="form-group">
+                    <label for="new-event-description">Event Description:</label>
+                    <input type="text" class="form-control" id="new-event-description">
+                </div>
+               
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="new-event-date">Event Date:</label>
+                                <input type="date" class="form-control" id="new-event-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-event-time">Event Time:</label>
+                                <input type="time" class="form-control" id="new-event-time">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                        
                     <div class="row text-center">
                         <div class="col-sm-12">
-                            <button id="submitRegistration" type="button" class="btn btn-primary">Submit</button>
+                            <button id="dont-add-event-btn" type="button" class="btn btn-primary">Cancel Event</button>
+                            <button id="add-event-btn" type="button" class="btn btn-primary">Add Event</button>
                         </div>
                     </div>
             </div>
         </div>
     </div>
-
-    <script src="calendar-new.js"></script>
+    
+ <script src="calendar-new.js"></script>
    
 </body>
 </html>

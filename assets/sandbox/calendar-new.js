@@ -16,6 +16,10 @@ $(document).ready(function() {
 
     var eventsArray;
     
+    $('#datetimepicker1').datetimepicker( {
+        defaultDate: "2018-11-01"
+    });
+
     //initialize calendar
     $('#calendar').fullCalendar({
         header: {
@@ -36,6 +40,7 @@ $(document).ready(function() {
             }
         },   
         eventMouseover: function(calEvent, jsEvent, view){
+            console.log("mouseover");
             console.log(jsEvent)
             console.log(view)
             $(this).attr("data-toggle", "tooltip");
@@ -44,17 +49,16 @@ $(document).ready(function() {
             $(this).tooltip("toggle")
         },
         eventClick: function(calEvent, jsEvent, view) {
+            console.log("event click");
             console.log(calEvent.description); 
             console.log(calEvent.id);
             $("#event-title").text(calEvent.title)
             $("#start-time").text(calEvent.start)
             $("#description").text(calEvent.description)
             $("#myModal").modal('toggle')
-            // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-            // alert('View: ' + view.name);
         }
     });
-    $("#myModal").modal('toggle')
+
     //function to locally save all events
     database.ref('events').once("value").then(function(snapshot){
         eventsArray = snapshot.val();
@@ -68,4 +72,48 @@ $(document).ready(function() {
         console.log(result);
         $("#calendar").fullCalendar('renderEvents', result, true)
     })
+    /** Modal for Admin only to add new event */
+    $("#admin-add-event-btn").on("click", function () {
+        console.log("Open Create New Event Modal"); 
+        $("#new-event-title").text("");
+        $("#datetimepicker1").text("");
+        $("#new-event-description").text("");
+        $("#modal-btn").val("Add Event");
+        $("#eventModal").attr("data-value", "Add-New-Event");
+        $("#eventModal").modal('toggle');
+    });
+
+    $("#add-event-btn").on("click", function (){
+       var title =  $("#new-event-title").val();
+       var description = $("#new-event-description").val();
+       var startDate =  $("#new-event-date").val();
+       var startTime =  $("#new-event-time").val();
+        $("#eventModal").modal('toggle');
+        console.log("Title: " + title);
+        console.log("Description: " + description);
+        console.log("Start Date: " + startDate);
+        console.log("Start time: " + startTime);
+        var dateString = startDate + " " + startTime;
+        console.log(dateString);
+        var startTimeMoment = moment(dateString);
+        console.log(startTimeMoment.utc());
+        console.log(startTimeMoment.format("dddd, MMMM Do YYYY HH:mm"));
+        var newEvent = {
+            "title": title,
+            "description": description,
+            "start": startTimeMoment.format("YYYY-MM-DD HH:mm")
+        };
+        database.ref("events").push(newEvent);
+    });
+
+    $("#dont-add-event-btn").on("click", function (){
+        $("#new-event-title").text("");
+        $("#new-event-date").text("");
+        $("#new-event-time").text("");
+        $("#new-event-description").text("");
+        $("#modal-btn").val("Add Event");
+        $("#eventModal").attr("data-value", "Add-New-Event");
+        $("#eventModal").modal('toggle');
+    });
+ 
 });
