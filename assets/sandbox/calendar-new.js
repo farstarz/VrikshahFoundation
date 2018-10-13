@@ -169,6 +169,7 @@ $(document).ready(function() {
         var start = eventObject.start;
    
         console.log("*******    EDIT    ********");
+        console.log(id);
         console.log(title);
         console.log(description);
         console.log(start.format("MM/DD/YYYY"));
@@ -179,8 +180,8 @@ $(document).ready(function() {
         $("#edit-event-title").val(title);
         $("#edit-event-date").val(start.format("MM/DD/YYYY"));
         $("#edit-event-time").val(start.format("hh:mm a"));
-        $("#edit-event-date").val(end.format("MM/DD/YYYY"));
-        $("#edit-event-time").val(end.format("hh:mm a"));
+        // $("#edit-event-date").val(end.format("MM/DD/YYYY"));
+        // $("#edit-event-time").val(end.format("hh:mm a"));
         $("#editEventModal").toggle();
 
         var title =  $("#edit-event-title").val();
