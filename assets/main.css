@@ -4,7 +4,19 @@
     position: fixed;
     background-color: #fff;
 }
+#logoBig {
+    position: absolute;
+  
+    height: 70px;
 
+}
+#logoSmall {
+    position: absolute;
+  
+    height: 70px;
+    display: none;
+
+}
 .nav {
     padding-top: 8px;
     width: 665px;
@@ -12,23 +24,81 @@
     margin: 0 auto;
     justify-self: center;
 }
-
-#logo {
-    position: absolute;
-    height: 70px;
-
+.nav-link {
+    font-family: 'Cormorant Garamond', serif;
+    color: #000;
+    font-size: 1.2em;
+}
+.nav-link:hover {
+    color: #000;
+    text-shadow: 1px 1px 10px #000;
+}
+.navBig{
+    display: static;
+    width: 100%;
+}
+.navSmall {
+    width: 100%;
+    display: none;
 }
 
 .userProfile {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     width: 45px;
     height: 45px;
     border: 2px solid black;
     border-radius: 50%;
-    margin-right: 10px;
-
+   
+ 
 }
 
 .mainContent {
     padding-top: 75px;
+    background-image: url("images/backgroundVF.jpg");
+    height: 1000px;
 
+
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.foot {
+    height: 50px;
+    background-color: #fff;
+}
+.foot p, a {
+    padding-right: 5px;
+}
+.questions {
+    height: 100%;
+    margin-left: 30px;
+}
+.questions a:hover {
+text-decoration: none;
+}
+.socialContact {
+    margin-right: 30px;
+}
+.socialContact i {
+    padding-right: 10px;
+}
+
+@media only screen and (max-width: 600px) {
+    .header #logoBig {
+       display: none;
+    }
+    .header #logoSmall {
+        display: block;
+    }
+    .navBig {
+        display: none;
+    }
+    .navSmall {
+        display: block;
+
+    }
 }
