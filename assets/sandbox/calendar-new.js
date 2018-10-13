@@ -150,13 +150,15 @@ $(document).ready(function() {
         var description = eventObject.description;  
         var start = eventObject.start;
         var end = eventObject.end;
+        console.log(start);
+        console.log(end);
         $("#edit-event-title").val(title);
         $("#edit-event-description").val(description);
         $("#edit-event-title").val(title);
-        $("#edit-event-date").val(start.format("MM/DD/YYYY"));
-        $("#edit-event-time").val(start.format("hh:mm a"));
-        // $("#edit-event-date").val(end.format("MM/DD/YYYY"));
-        // $("#edit-event-time").val(end.format("hh:mm a"));
+        $("#edit-event-date").val(start.format('YYYY-MM-DD'));
+        $("#edit-event-time").val(start.format("hh:mm:ss.ms"));
+        $("#edit-event-end-date").val(end.format('YYYY-MM-DD'));
+        $("#edit-event-end-time").val(end.format("hh:mm:ss.ms"));
         $("#editEventModal").modal('toggle');
      });
 
