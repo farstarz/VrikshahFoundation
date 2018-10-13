@@ -61,7 +61,9 @@ a:hover, a:focus {
    
  
 }
-
+p, a {
+    font-family: 'Raleway', sans-serif;
+}
 .mainContent {
     padding-top: 75px;
     background-image: url("images/backgroundVF.jpg");
