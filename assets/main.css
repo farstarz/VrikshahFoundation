@@ -58,8 +58,14 @@ a:hover, a:focus {
     height: 45px;
     border: 2px solid black;
     border-radius: 50%;
-   
- 
+    display: none;
+}
+.login {
+    margin-right: 25px;
+    display: block;
+}
+.loginPanel {
+    margin-top: 200px;
 }
 p, a {
     font-family: 'Raleway', sans-serif;
