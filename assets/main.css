@@ -13,7 +13,7 @@
 #logoSmall {
     position: absolute;
   
-    height: 70px;
+    height: 75px;
     display: none;
 
 }
@@ -29,17 +29,25 @@
     color: #000;
     font-size: 1.2em;
 }
-.nav-link:hover {
-    color: #000;
-    text-shadow: 1px 1px 10px #000;
-}
+
 .navBig{
     display: static;
     width: 100%;
+    margin-left: 24%;
+
 }
 .navSmall {
     width: 100%;
     display: none;
+    margin-left: 75px;
+}
+.dropdown-menu {
+    text-align: center;
+    margin-top: 23px;
+    padding: 0;
+}
+a:hover, a:focus {
+    color: inherit;
 }
 
 .userProfile {
@@ -69,6 +77,7 @@
 .foot {
     height: 50px;
     background-color: #fff;
+    padding-top: 10px;
 }
 .foot p, a {
     padding-right: 5px;
@@ -82,12 +91,15 @@ text-decoration: none;
 }
 .socialContact {
     margin-right: 30px;
+    padding-bottom: 15px;
 }
 .socialContact i {
     padding-right: 10px;
+    
+
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1000px) {
     .header #logoBig {
        display: none;
     }
