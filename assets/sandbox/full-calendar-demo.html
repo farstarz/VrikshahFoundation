@@ -7,10 +7,6 @@
     <title>Demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   
-</head>
-
-<body>
-
     <!-- Firebase App is always required and must be first -->
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
 
@@ -22,37 +18,40 @@
     <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
    
-
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
 
     <!-- Bootstrap -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
    crossorigin="anonymous">
+     
+   <!-- FullCalendar -->
+     <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
+     <link rel='stylesheet' href='../main.css' />
+     <script src='fullcalendar-3.9.0/lib/moment.min.js'></script>
+     <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
+ 
+</head>
 
-  
-
-    <!-- FullCalendar -->
-    <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
-    <link rel='stylesheet' href='../main.css' />
-    <script src='fullcalendar-3.9.0/lib/moment.min.js'></script>
-    <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
-    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-    
-
-    <button id="admin-add-event-btn" type="button">Add New Event (Admin Only()</button>
+<body>
+    <button id="admin-add-event-btn" class="admin" type="button">Add New Event (Admin Only)</button>
     <div id='calendar'></div>
   
     <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                    <div class="modal-header">
+                            <h5 class="modal-title">Event</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
                 <h1 id="event-title">Title</h1>
                 <p id="start-time">Start</p>
+                <p id="end-time">End</p>
                 <p id="description">Description</p>
                 <div class="form-group">
                         <label for="userEmail">Name:</label>
@@ -70,14 +69,16 @@
                 </div>                            
                 <div class="row text-center">
                     <div class="col-sm-12">
+                        <button id="close-btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                         <button id="modal-btn" type="button" class="btn btn-primary">Submit</button>
+                        <button id="edit-event-btn" type="button" class="btn btn-primary admin" data-dismiss="modal">Edit</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Dialog for creating new event (admin only) -->
+    <!-- ADD EVENT Modal Dialog for creating new event (admin only) -->
     <div id="eventModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -95,26 +96,90 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="new-event-date">Event Date:</label>
+                                <label for="new-event-date">Event Start Date:</label>
                                 <input type="date" class="form-control" id="new-event-date">
                             </div>
                             <div class="form-group">
-                                <label for="new-event-time">Event Time:</label>
+                                <label for="new-event-time">Event Start Time:</label>
                                 <input type="time" class="form-control" id="new-event-time">
                             </div>
                         </div>
-                    </div>
+                    
+                    <div class="col-sm-6">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="new-event-end-date">Event End Date:</label>
+                                    <input type="date" class="form-control" id="new-event-end-date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-event-end-time">Event End Time:</label>
+                                    <input type="time" class="form-control" id="new-event-end-time">
+                                </div>
+                            </div>
+                        </div>
+                     </div>
                 </div>
                                         
-                    <div class="row text-center">
-                        <div class="col-sm-12">
-                            <button id="dont-add-event-btn" type="button" class="btn btn-primary">Cancel Event</button>
-                            <button id="add-event-btn" type="button" class="btn btn-primary">Add Event</button>
-                        </div>
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <button id="dont-add-event-btn" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <button id="add-event-btn" type="button" class="btn btn-primary">Add Event</button>
                     </div>
+                </div>
             </div>
         </div>
     </div>
+
+     <!-- Modal Dialog for editing an existing event (admin only) -->
+     <div id="editEventModal" class="modal fade bd-example-modal-lg" tabindex="-1"  role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <h2 class="m-3">Edit Event</h2>
+                    <div class="form-group">
+                        <label for="edit-event-title">Event Title:</label>
+                        <input type="text" class="form-control" id="edit-event-title">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-event-description">Event Description:</label>
+                        <input type="text" class="form-control" id="edit-event-description">
+                    </div>
+                   
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="edit-event-date">Start Event Date:</label>
+                                    <input type="date" class="form-control" id="edit-event-date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-event-time">Start Event Time:</label>
+                                    <input type="time" class="form-control" id="edit-event-time">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="edit-event-end-date">End Event Date:</label>
+                                        <input type="date" class="form-control" id="edit-event-end-date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="edit-event-end-time">End Event Time:</label>
+                                        <input type="time" class="form-control" id="edit-event-end-time">
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                                            
+                        <div class="row text-center">
+                            <div class="col-sm-12">
+                                <button id="cancel-btn" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                <button id="edit-event-btn" type="button" class="btn btn-primary">Add Event</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        
     
  <script src="calendar-new.js"></script>
    
