@@ -65,9 +65,7 @@ a:hover, a:focus {
     margin-right: 25px;
     display: block;
 }
-.loginPanel {
-    margin-top: 200px;
-}
+
 .login-header {
     color: #fff;
     margin: 35px;
@@ -109,8 +107,6 @@ text-decoration: none;
 }
 .socialContact i {
     padding-right: 10px;
-    
-
 }
 
 @media only screen and (max-width: 1000px) {
