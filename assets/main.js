@@ -1,5 +1,15 @@
 // Globals
 var currentUser = null; // If left null, no user is logged in.
+var currentUserStorageName = "currentUser";
+var currentWindowStorageName = "currentWindow";
+console.log("wtf");
+// Set the global logged in user.
+function getLoggedInUser(){
+    currentUser = JSON.parse(localStorage.getItem(currentUserStorageName));
+}
+getLoggedInUser();
+
+// TODO: Jake, you'll now need to figure out a way to update the UI by checking if current user is not null.
 
 // Initialize Firebase
 var config = {
@@ -97,7 +107,59 @@ async function isValidEmail(email) {
 
 // Used to return the user back to the original page they were on before 
 // logging in.
-var currentWindowVar = "currentWindow";
+
 $("#loginBtn").on('click', function(){
-    localStorage.setItem(currentWindowVar, window.location.href);
+    localStorage.setItem(currentWindowStorageName, window.location.href);
 });
+
+// User Authentication state event listener.
+// Gets triggered whenever the user logs in or out.
+firebase.auth().onAuthStateChanged(async user => {
+    
+    // Check if user logged in and the state has not been saved to local storage.
+    if (user && currentUser === null) {
+        // Ensure that the user exits in our database.
+        var userExits = await firebaseDB.userExists(user.email);
+        if (userExits) {
+            currentUser = await firebaseDB.getUser(user.email);
+            localStorage.setItem(currentUserStorageName, JSON.stringify(currentUser));
+            updateUI(currentUser);
+        } else {
+            // If we fail to create the user in our database, log the user out.
+            logoutUser();
+
+            // TODO: We'll need to tell the user that something when wrong when creating their user profile.
+        }
+    } 
+});
+
+function updateUI(userLoggedIn) {
+    if (userLoggedIn) {
+        console.log("Update UI To show User Stuff");
+        console.log("hello");
+        // Show all user ui stuff
+        $(".userProfile").css({
+            "display": "block"
+        })
+        
+        // Depending on their role...we'll update the UI appropiately.
+
+    } else {
+        console.log("Update UI To hide User Stuff");
+
+        // hide user UI stuff
+    }
+}
+
+// TODO: Jake, you'll need to clean this up.
+$("#logOutLink").on('click', function () {
+    logoutUser();
+    console.log("User has been logged out");
+})
+
+function logoutUser() {
+    updateUI(false);
+    currentUser = null;
+    firebase.auth().signOut();
+    localStorage.removeItem(currentUserStorageName);
+}
