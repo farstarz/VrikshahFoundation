@@ -6,15 +6,35 @@ function verifyEntryPoint() {
     }
 }
 verifyEntryPoint();
-console.log(currentWindow);
 
 // FirebaseUI config.
 var uiConfig = {
     signInSuccessUrl: currentWindow,
+    callbacks: {
+        // Called when the user has been successfully signed in.
+        signInSuccessWithAuthResult: function (authResult) {
+            // Create user object.
+            var user = new User(authResult.user.email, authResult.user.displayName, true, authResult.user.photoURL);
+
+            // Check if user is a new user.
+            if (authResult.additionalUserInfo.isNewUser) {
+                firebaseDB.createUser(user);
+            }
+
+            // Store user in local storage to allow other areas of our application to easily access user info.
+            localStorage.setItem(currentUserStorageName, JSON.stringify(user));
+            
+            // Redirect on successful login.
+            return true; 
+        },
+        
+        // Called when the user failed to log in.
+        signInFailure: function(error){
+            // TODO: Need to handle error.
+        }
+    },
     signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,                
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,           
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
     ],
     // tosUrl and privacyPolicyUrl accept either url string or a callback

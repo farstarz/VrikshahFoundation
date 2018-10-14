@@ -19,35 +19,3 @@ exports.example = functions.database.ref('testing/{testId}').onCreate((snapshot,
 
     return snapshot.ref.update( { id: uppercase});
 });
-
-exports.createUser = functions.auth.user().onCreate((user) => {
-    
-    var newUser = new User(user.email, user.displayName, true, user.photoURL);
-    return createUser(newUser);
-
-    function User(email, name, notificationsOn, photoUrl) {
-        this.email = email;
-        this.name = name;
-        this.notificationsOn = notificationsOn;
-        this.photoUrl = photoUrl;
-    }
-
-    function createUser(user){
-        var usersRootObj = "users";
-        var userId = encodeAsFirebaseKey(user.email);
-
-        return admin.database().ref(usersRootObj).child(userId).set(user);  
-    }
-
-    function encodeAsFirebaseKey(string){
-        // Used to encode an email into a valid Firebase key.
-        // This key will be used to quickly query for existing users using their emails.
-        return string.replace(/\%/g, '%25')
-        .replace(/\./g, '%2E')
-        .replace(/\#/g, '%23')
-        .replace(/\$/g, '%24')
-        .replace(/\//g, '%2F')
-        .replace(/\[/g, '%5B')
-        .replace(/\]/g, '%5D');    
-    }
-  });
