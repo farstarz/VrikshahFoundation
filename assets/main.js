@@ -1,3 +1,6 @@
+// Globals
+var currentUser = null; // If left null, no user is logged in.
+
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4",
@@ -14,13 +17,6 @@ var usersRootObj = "users";
 var userEventsRootObj  = "userEvents";
 var eventsRootObj = "events";
 var attendeesRootObj = "attendees";
-
-// User Constructor
-function User(email, name, notificationsOn) {
-    this.email = email;
-    this.name = name;
-    this.notificationsOn = notificationsOn;
-}
 
 // Event Constructor
 function Event(date, description) {
@@ -46,11 +42,6 @@ var firebaseDB = {
         .replace(/\//g, '%2F')
         .replace(/\[/g, '%5B')
         .replace(/\]/g, '%5D');    
-    },
-
-    createUser: function(user){
-        var userId = this.encodeAsFirebaseKey(user.email);        
-        this.DB.ref(usersRootObj).child(userId).set(user);  
     },
 
     createEvent: function(eventId, event){
@@ -103,3 +94,10 @@ async function isValidEmail(email) {
     });
     return response.isValid;
 }
+
+// Used to return the user back to the original page they were on before 
+// logging in.
+var currentWindowVar = "currentWindow";
+$("#loginBtn").on('click', function(){
+    localStorage.setItem(currentWindowVar, window.location.href);
+});
