@@ -17,12 +17,15 @@ exports.example = functions.database.ref('testing/{testId}').onCreate((snapshot,
     console.log("WTF: " + original);
     const uppercase = original.toUpperCase();
 
-    return snapshot.ref.update( { id: uppercase});
+    return snapshot.ref.update({
+        id: uppercase
+    });
 });
 
 exports.createUser = functions.auth.user().onCreate((user) => {
-    
+
     var newUser = new User(user.email, user.displayName, true, user.photoURL);
+    createRole(newUser.email);
     return createUser(newUser);
 
     function User(email, name, notificationsOn, photoUrl) {
@@ -32,22 +35,27 @@ exports.createUser = functions.auth.user().onCreate((user) => {
         this.photoUrl = photoUrl;
     }
 
-    function createUser(user){
+    function createUser(user) {
         var usersRootObj = "users";
         var userId = encodeAsFirebaseKey(user.email);
-
-        return admin.database().ref(usersRootObj).child(userId).set(user);  
+        return admin.database().ref(usersRootObj).child(userId).set(user);
     }
 
-    function encodeAsFirebaseKey(string){
-        // Used to encode an email into a valid Firebase key.
-        // This key will be used to quickly query for existing users using their emails.
+    function createRole(email){
+        var userRolesObj = "roles";
+        var userId = encodeAsFirebaseKey(email);
+        admin.database().ref(userRolesObj).child(userId).set(0);    
+    } 
+
+    function encodeAsFirebaseKey(string) {
+        // Used to encode an email into a valid Firebase key.	
+        // This key will be used to quickly query for existing users using their emails.	
         return string.replace(/\%/g, '%25')
-        .replace(/\./g, '%2E')
-        .replace(/\#/g, '%23')
-        .replace(/\$/g, '%24')
-        .replace(/\//g, '%2F')
-        .replace(/\[/g, '%5B')
-        .replace(/\]/g, '%5D');    
+            .replace(/\./g, '%2E')
+            .replace(/\#/g, '%23')
+            .replace(/\$/g, '%24')
+            .replace(/\//g, '%2F')
+            .replace(/\[/g, '%5B')
+            .replace(/\]/g, '%5D');
     }
-  });
+});
