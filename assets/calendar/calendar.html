@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="../main.css">
     <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
     <link rel="stylesheet" href="calendar.css">
+    <!--Google Maps API Key-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4&libraries=places"></script>
 
 
     <!--End Links-->
@@ -51,10 +53,10 @@
         <!--Mobile-->
         <div class="nav">
             <div class="dropdown navSmall">
-                <btn class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                <button class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <i class="fas fa-bars"></i>
-                </btn>
+                </button>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
@@ -98,6 +100,7 @@
                         <p id="start-time">Start</p>
                         <p id="end-time">End</p>
                         <p id="description">Description</p>
+                        <div id="map"></div>
                         <div class="form-group">
                             <label for="userEmail">Name:</label>
                             <input type="text" class="form-control" id="userName" placeholder="Enter your name">

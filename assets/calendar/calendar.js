@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var admin = false;
+    var admin = true;
     if (currentUser !== null){
         
         if (currentUserRole > 0){
@@ -49,9 +49,26 @@ $(document).ready(function () {
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
             $("#edit-event-btn").attr("data-index", calEvent.index);
+            var myLatLng = {lat: calEvent.lat, lng: calEvent.lng};
+            initMap(myLatLng);
             $("#myModal").modal('toggle')
+            
         }
     });
+
+    /**function to initialize map */
+    function initMap(location) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: location
+        });
+
+        var marker = new google.maps.Marker({
+          position: location,
+          map: map,
+          title: 'Hello World!'
+        });
+      }
 
     /** function to locally save all events */
     firebaseDB.DB.ref('events').once("value").then(function (snapshot) {
