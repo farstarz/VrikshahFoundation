@@ -54,22 +54,6 @@ var firebaseDB = {
         .replace(/\]/g, '%5D');    
     },
 
-    createUser: function(user){
-        var userId = this.encodeAsFirebaseKey(user.email);
-        this.DB.ref(this.usersRootObj).child(userId).set(user).catch(function(error){
-            alert('Failed to Create User!');
-            firebaseDB.logError(error);
-        });
-
-        // Create user role. Roles are separated into a separate object because
-        // when a user is first created by firebase UI auth, it has no way of knowing what
-        // roles the user is suppose to be. Set to user role by default.
-        this.DB.ref(this.userRolesRootObj).child(userId).set(0).catch(function(error){
-            alert('Failed to set user role!');
-            firebaseDB.logError(error);
-        }); 
-    },
-
     createEvent: function(eventId, event){
         this.DB.ref(this.eventsRootObj).child(eventId).set(event).catch(function(error){
             alert('Failed to create event');

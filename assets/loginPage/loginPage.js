@@ -14,12 +14,7 @@ var uiConfig = {
         // Called when the user has been successfully signed in.
         signInSuccessWithAuthResult: function (authResult) {
             // Create user object.
-            var user = new User(authResult.user.email, authResult.user.displayName, true, authResult.user.photoURL);
-
-            // Check if user is a new user.
-            if (authResult.additionalUserInfo.isNewUser) {
-                firebaseDB.createUser(user);
-            }
+            var user = new User(authResult.user.email, authResult.user.displayName, true, authResult.user.photoURL); 
 
             // Store user in local storage to allow other areas of our application to easily access user info.
             localStorage.setItem(currentUserStorageName, JSON.stringify(user));
