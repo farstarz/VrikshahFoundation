@@ -183,7 +183,7 @@ function updateUI(userLoggedIn, userRole) {
            
         })
         $("#dropdownCaret").css({
-            "display": "block",
+            "display": "inline-block",
             "margin-right": "50px"
             
         })

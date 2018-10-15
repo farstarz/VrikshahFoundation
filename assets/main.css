@@ -4,6 +4,7 @@
     position: fixed;
     background-color: #fff;
     margin-bottom: 50px;
+    z-index: 1000;
 }
 #logoBig {
     position: absolute;
@@ -69,8 +70,10 @@ a:hover, a:focus {
     margin: 35px;
     font-size: 3em;
 }
+
 #loggedInDropdown {
-    margin-right: 200px;
+    width: 15px;
+    margin-right: 50px;
     display: none;
 }
 p, a {
