@@ -103,3 +103,13 @@ async function isValidEmail(email) {
     });
     return response.isValid;
 }
+
+function preTriggerSendEmail() {   //pretrigger with a dummy testID
+    database.ref(`date/2018/10/04/eventID/testID`).once("value").then((snapshot)=>{
+        snapshot.val() = "true";
+        console.log(snapshot);
+        return(0);
+    });
+}
+
+preTriggerSendEmail();
