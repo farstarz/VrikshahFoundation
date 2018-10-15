@@ -2,7 +2,7 @@
 var currentUser = null; // If left null, no user is logged in.
 var currentUserStorageName = "currentUser";
 var currentWindowStorageName = "currentWindow";
-console.log("wtf");
+
 // Set the global logged in user.
 function getLoggedInUser(){
     currentUser = JSON.parse(localStorage.getItem(currentUserStorageName));
@@ -146,7 +146,11 @@ function updateUI(userLoggedIn) {
             "display": "none",
            
         })
-      
+        $("#dropdownCaret").css({
+            "display": "block",
+            "margin-right": "300px"
+            
+        })
         // Depending on their role...we'll update the UI appropiately.
 
     } else {
@@ -155,9 +159,11 @@ function updateUI(userLoggedIn) {
             "display": "none",
            
         })
+       
         $("#loginBtn").css({
             "display": "block"
         })
+    
         // hide user UI stuff
     }
 }
