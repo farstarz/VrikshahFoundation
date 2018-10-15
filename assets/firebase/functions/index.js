@@ -2,6 +2,12 @@
 //var gcloud = require("google-cloud");   
 
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+// initialize moment.js for date functions
+var moment = require('moment');
+moment().format();
+
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -58,11 +64,18 @@ exports.welcomeEmail = functions.database.ref('welcomeEmail/{welcomeID}').onCrea
 
 
 //trigger time
-var yyyy=2018;
-var mm=10;
-var dd=04;
+var timeNow = moment();
+console.log(timeNow);
+var yyyy= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("YYYY");
+var mm= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("MM");
+var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
+// get the next day
+dd = parseInt(dd)+1;
+console.log('year: '+yyyy+'month: '+mm+'day: '+dd);
 console.log("before trigger");
-exports.sendEmailNotification = functions.database.ref(`dates/2018/10/04/eventID`).onWrite((snapshot, context)=> {
+var dateRef ="dates/"+yyyy+"/"+mm+"/"+dd+"/eventID";
+console.log(dateRef); 
+exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd+"/eventID").onWrite((snapshot, context)=> {
   // if testID was changed
   // console.log(snapshot);
   console.log(snapshot.after._data.testID);

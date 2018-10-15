@@ -1,4 +1,9 @@
 // Initialize Firebase
+var firebase = require('firebase');
+// initialize moment.js for date functions
+var moment = require('moment');
+moment().format();
+
 var config = {
     apiKey: "AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4",
     authDomain: "vrikshahfoundation-afc36.firebaseapp.com",
@@ -104,10 +109,29 @@ async function isValidEmail(email) {
     return response.isValid;
 }
 
+
+// code of sending email notifications at 6AM day before the events
+// get time at hour 
+
+
+var timeWeWant = moment({ hour:23, minute:28 });
+var timeNow = moment();
+var offsetMillis = timeWeWant - timeNow;
+console.log(offsetMillis);
+setTimeout(preTriggerSendEmail, offsetMillis);
+
+// pretrigger function changes value of testID to true which triggers sendEmailNotification cloud function
+var timeNow = moment();
+console.log(timeNow);
+var yyyy= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("YYYY");
+var mm= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("MM");
+var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
+dd = parseInt(dd)+1;
+console.log(dd);
 function preTriggerSendEmail() {   //pretrigger with a dummy testID
-    database.ref(`date/2018/10/04/eventID/testID`).once("value").then((snapshot)=>{
-        snapshot.val() = "true";
-        console.log(snapshot);
+    firebaseDB.DB.ref(`/date/${yyyy}/${mm}/${dd}/eventID/testID`).once("value").then((snapshot)=>{
+        // snapshot.val() = "true";
+        console.log(snapshot.ref_.repo.app);
         return(0);
     });
 }
