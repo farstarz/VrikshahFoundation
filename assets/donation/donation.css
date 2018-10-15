@@ -13,3 +13,6 @@
     min-width: 300px;
     max-width: 500px;
 }
+.message {
+    text-indent: 10px;
+}
