@@ -140,6 +140,7 @@ function updateUI(userLoggedIn) {
         // Show all user ui stuff
         $(".userProfile").css({
             "display": "inline-block",
+            "width": "45px",
             "background-image": "url("+ currentUser.photoUrl+ ")"
         })
         $("#loginBtn").css({
@@ -148,7 +149,7 @@ function updateUI(userLoggedIn) {
         })
         $("#dropdownCaret").css({
             "display": "block",
-            "margin-right": "300px"
+            "margin-right": "50px"
             
         })
         // Depending on their role...we'll update the UI appropiately.
