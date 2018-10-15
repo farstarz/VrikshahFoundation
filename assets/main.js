@@ -31,8 +31,6 @@ function Event(date, description) {
 }
 
 var firebaseDB = {
-    // TODO: 
-    // 1. Need to add error handling for database transactions. 
 
     DB: firebase.database(),
 
@@ -42,6 +40,7 @@ var firebaseDB = {
     attendeesRootObj: "attendees",
     eventsRootObj: "events",
     userRolesRootObj: "roles",
+    errorLogRootObj: "errors",
 
     encodeAsFirebaseKey: function(string){
         // Used to encode an email into a valid Firebase key.
@@ -57,16 +56,25 @@ var firebaseDB = {
 
     createUser: function(user){
         var userId = this.encodeAsFirebaseKey(user.email);
-        this.DB.ref(this.usersRootObj).child(userId).set(user);
+        this.DB.ref(this.usersRootObj).child(userId).set(user).catch(function(error){
+            alert('Failed to Create User!');
+            firebaseDB.logError(error);
+        });
 
         // Create user role. Roles are separated into a separate object because
         // when a user is first created by firebase UI auth, it has no way of knowing what
-        // roles the user is suppose to be.
-        this.DB.ref(this.userRolesRootObj).child(userId).set(0); // Set to user role by default.
+        // roles the user is suppose to be. Set to user role by default.
+        this.DB.ref(this.userRolesRootObj).child(userId).set(0).catch(function(error){
+            alert('Failed to set user role!');
+            firebaseDB.logError(error);
+        }); 
     },
 
     createEvent: function(eventId, event){
-        this.DB.ref(this.eventsRootObj).child(eventId).set(event);
+        this.DB.ref(this.eventsRootObj).child(eventId).set(event).catch(function(error){
+            alert('Failed to create event');
+            firebaseDB.logError(error);
+        });
     },
 
     registerUserForEvent: function(email, eventId){
@@ -75,18 +83,25 @@ var firebaseDB = {
         // { eventId: true }
         // This give us the ability to avoid duplicate events and a quick way to check if a user is 
         // registered for a particular event.
-        this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).set(true);        
+        this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).set(true).catch(function(error){
+            alert('Failed to register the user for the event');
+            firebaseDB.logError(error);
+        });        
     },
 
     getUser: async function(email){
         var userId = this.encodeAsFirebaseKey(email);
-        var user = await this.DB.ref(this.usersRootObj).child(userId).once('value');
+        var user = await this.DB.ref(this.usersRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         return user.val();
     },
 
     getUserRole: async function(email){
         var userId = this.encodeAsFirebaseKey(email);
-        var user = await this.DB.ref(this.userRolesRootObj).child(userId).once('value');
+        var user = await this.DB.ref(this.userRolesRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         return user.val();
     },
 
@@ -96,15 +111,29 @@ var firebaseDB = {
 
     getUserEvents: async function(email){
         var userId = this.encodeAsFirebaseKey(email);
-        var userEvents = await this.DB.ref(this.usersEventsRootObj).child(userId).once('value');
+        var userEvents = await this.DB.ref(this.usersEventsRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         // Returns null if user has not registered for any events.
         return await userEvents.val() === null ? null: Object.keys(userEvents.val());
     },
 
     isUserRegisteredForEvent: async function(email, eventId){
         var userId = this.encodeAsFirebaseKey(email);
-        var event = await this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).once('value');
+        var event = await this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         return event.val() !== null;
+    },
+
+    logError: function(error){
+        // This function needs to ref the DB object directly and cannot use 'this'
+        // since it's intended to be called by a promise catch method.
+        var currentDateTime = new Date();
+        firebase.database().ref(firebaseDB.errorLogRootObj).push({
+            timestamp: currentDateTime.toString(),
+            error: error,
+        });
     }
 }
 
