@@ -139,14 +139,25 @@ function updateUI(userLoggedIn) {
         console.log("hello");
         // Show all user ui stuff
         $(".userProfile").css({
-            "display": "block"
+            "display": "inline-block",
+            "background-image": "url("+ currentUser.photoUrl+ ")"
         })
-        
+        $("#loginBtn").css({
+            "display": "none",
+           
+        })
+      
         // Depending on their role...we'll update the UI appropiately.
 
     } else {
         console.log("Update UI To hide User Stuff");
-
+        $(".userProfile").css({
+            "display": "none",
+           
+        })
+        $("#loginBtn").css({
+            "display": "block"
+        })
         // hide user UI stuff
     }
 }

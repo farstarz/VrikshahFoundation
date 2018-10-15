@@ -52,10 +52,10 @@ a:hover, a:focus {
 }
 
 .userProfile {
-    position: absolute;
+    position: absoltute;
     top: 15px;
-    right: 15px;
-    width: 45px;
+    right: 10px;
+    width: 45px !important;
     height: 45px;
     border: 2px solid black;
     border-radius: 50%;
@@ -70,6 +70,9 @@ a:hover, a:focus {
     color: #fff;
     margin: 35px;
     font-size: 3em;
+}
+#loggedInDropdown {
+    margin-right: 200px;
 }
 p, a {
     font-family: 'Raleway', sans-serif;
