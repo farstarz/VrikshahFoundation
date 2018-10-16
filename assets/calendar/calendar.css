@@ -5,3 +5,24 @@
     padding: 20px;
     border-radius: 15px;
   }
+  #map, #newMap, #editMap {
+    height: 40vh;
+    width: 50vw;
+    position: initial;
+  }
+
+  #new-pac-input, #edit-pac-input {
+    height: 5vh;
+    left: 0;
+    display: absolute;
+  }
+
+#main-row {
+  max-width: 98vw !important;
+  /* position: absolute; */
+}
+
+#add-col, #edit-col {
+  display: none;
+  background: white;
+}
