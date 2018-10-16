@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+
+    <!-- Additional services that will be used -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-functions.js"></script>
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
+   
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <!-- FullCalendar -->
+    <link rel='stylesheet' href='fullcalendar-3.9.0/fullcalendar.css' />
+    <link rel='stylesheet' href='../main.css' />
+    <script src='fullcalendar-3.9.0/lib/moment.min.js'></script>
+    <script src='fullcalendar-3.9.0/fullcalendar.js'></script>
+    <button id="set-events-btn">Set Events</button>
+    <div id='calendar'></div>
+  
+    <script>
+    $(function() {         
+        
+        $('#calendar').fullCalendar({    
+            // defaultView: 'listWeek',
+            eventClick: function(calEvent, jsEvent, view) {
+                console.log(calEvent.title); 
+                console.log(calEvent);
+                // alert('Event: ' + calEvent.title);
+                // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+                // alert('View: ' + view.name);
+            } 
+        })
+
+        $("#set-events-btn").on("click", function() {
+            console.log("button clicked");
+            $('#calendar').fullCalendar("updateEvents", 
+                [
+                    {
+                    title: 'Tree Preparation',
+                    start: '2018-10-07T13:00:00.008',
+                    end: '2018-10-07T13:30:00.008'
+                    },
+                    {
+                    title: 'New Delhi Tree Planting',
+                    start: '2018-10-07T14:00:00-0400',
+                    end: '2018-10-07T14:30:00-0400'
+                    }
+                ]
+            );
+        });
+    });
+    
+    </script>
+   
+</body>
+</html>
