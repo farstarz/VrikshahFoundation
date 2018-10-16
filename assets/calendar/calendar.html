@@ -80,11 +80,14 @@
     <!-- Main-->
 
     <div class="mainContent">
-        <div class="container text-center">
+        <div class="container text-center row" id="main-row">
+            <div class="col-xl-3" id="empty"></div>
             <br>
-            <div id='calendar'></div>
-            <br>
-            <button id="admin-add-event-btn" class="admin btn btn-success d-none" type="button">Add New Event</button>
+            <div class="col-xl-6">
+                <div id='calendar'></div>
+                <br>
+                <button id="admin-add-event-btn" class="admin btn btn-success d-none" type="button">Add New Event</button>
+            </div>
 
             <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                 aria-hidden="true">
@@ -127,10 +130,9 @@
             </div>
 
             <!-- ADD EVENT Modal Dialog for creating new event (admin only) -->
-            <div id="eventModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+            <div class="col-xl-6" id="add-col">
+                <div class="temp-dialog temp-lg">
+                    <div class="temp-content">
                         <h2 class="m-3">Create New Event</h2>
                         <div class="form-group">
                             <label for="title">Event Title:</label>
@@ -168,22 +170,23 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <input id="new-pac-input" class="controls" type="text" placeholder="Search Box">
+                            <div id="newMap"></div>
+                        </div>
                         <div class="row text-center">
                             <div class="col-sm-12">
-                                <button id="dont-add-event-btn" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                <button id="dont-add-event-btn" type="button" class="btn btn-primary" data-dismiss="temp">Cancel</button>
                                 <button id="add-event-btn" type="button" class="btn btn-primary">Add Event</button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>            
             </div>
-
             <!-- Modal Dialog for EDITING an existing event (admin only) -->
-            <div id="editEventModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
+            <div class="col-xl-6" id="edit-col">
+                <div class="temp-dialog temp-lg">
+                    <div class="temp-content">
                         <h2 class="m-3">Edit Event</h2>
                         <div class="form-group">
                             <label for="edit-event-title">Event Title:</label>
@@ -218,10 +221,13 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <input id="edit-pac-input" class="controls" type="text" placeholder="Search Box">
+                            <div id="editMap"></div>
+                        </div>
                         <div class="row text-center">
                             <div class="col-sm-12">
-                                <button id="cancel-btn" type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                <button id="cancel-btn" type="button" class="btn btn-primary" data-dismiss="temp">Cancel</button>
                                 <button id="submit-edit-event-btn" type="button" class="btn btn-primary">Submit changes</button>
                             </div>
                         </div>
