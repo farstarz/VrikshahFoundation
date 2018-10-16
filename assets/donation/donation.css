@@ -16,3 +16,6 @@
 .message {
     text-indent: 10px;
 }
+h2, p {
+    font-family: "Raleway", sans-serif;
+}

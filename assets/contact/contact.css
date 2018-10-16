@@ -15,3 +15,6 @@
     border-radius: 10px;
     background-color: rgba(242,239,233,.8);
 }
+h5, h3 {
+    font-family: 'Raleway', sans-serif;
+}
