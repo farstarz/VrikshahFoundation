@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:500|Raleway:700" rel="stylesheet">
 
     <link rel="stylesheet" href="../main.css">
+    <link rel="stylesheet" href="contact.css">
 
     
 
@@ -36,9 +37,6 @@
         <!--Nav-->
         <div class="navBig">
         <ul class="nav d-flex justify-content-between ">
-            <li class="nav-item">
-                <a class="nav-link" href="../eventsAndActivities/eventsAndActivities.html">events</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="../calendar/calendar.html">calendar</a>
             </li>
@@ -69,7 +67,14 @@
               
             </div>
         <!--End  Nav-->
-
+        <div class="dropdown" id="loggedInDrowndown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><button id="logOutLink">Logout</button></li>
+              <li><a href="">Settings</a></li>
+            </ul>
+          </div>
 
         <div class="userProfile">
         </div>
@@ -84,7 +89,50 @@
 
     <div class="mainContent">
         <div class="container">
-
+                <div class="contact-form contactStyle">
+                        
+                        <form class="text-center">
+                            <h3>Send Us A Message</h3>
+                           <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" name="txtName" class="form-control" placeholder="Your Name" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="txtEmail" class="form-control" placeholder="Your Email" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="txtPhone" class="form-control" placeholder="Your Phone Number" value="" />
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <textarea name="txtMsg" class="form-control" placeholder="Your Message" style="width: 100%; height: 150px; margin-bottom: 10px;"></textarea>
+                                        <div class="form-group">
+                                                <input type="submit" name="btnSubmit" class="btnContact btn-primary mx-auto" value="Send Message" />
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                        <div class="infoContainer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="info">Phone Number :</h5>
+                                    <h5 class="info">Email :</h5>
+                                    <h5 class="info">Location :</h5>
+                                </div>
+                                <div class="col-md-6 text-center">
+                                    <h5>Find Us On Social Media</h5>
+                                        <a href="https://www.facebook.com/vrikshahfoundation/" target="_blank"><i class="fab fa-facebook fa-4x"></i></a>
+                                        <a href="https://twitter.com/VrikshahF" target="_blank"><i class="fab fa-twitter fa-4x"></i></a>
+                                  
+                                </div>
+                            </div>
+                        </div>
+            
         </div>
     </div>
 

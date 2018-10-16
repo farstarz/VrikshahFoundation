@@ -4,6 +4,7 @@
     position: fixed;
     background-color: #fff;
     margin-bottom: 50px;
+    z-index: 1000;
 }
 #logoBig {
     position: absolute;
@@ -13,7 +14,7 @@
 }
 #logoSmall {
     position: absolute;
-  
+    top: 0px;
     height: 75px;
     display: none;
 
@@ -52,10 +53,8 @@ a:hover, a:focus {
 }
 
 .userProfile {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 45px;
+ 
+    /* width: 45px !important; */
     height: 45px;
     border: 2px solid black;
     border-radius: 50%;
@@ -70,6 +69,12 @@ a:hover, a:focus {
     color: #fff;
     margin: 35px;
     font-size: 3em;
+}
+
+#loggedInDropdown {
+    
+    margin-right: 50px;
+    display: none;
 }
 p, a {
     font-family: 'Raleway', sans-serif;

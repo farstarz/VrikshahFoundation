@@ -1,0 +1,21 @@
+.donationBox {
+    margin-top: 60px;
+    background-color: rgba(242,239,233,.8);
+    border-radius: 25px;
+    padding: 20px 20px 20px 20px;
+}
+.donorbox {
+ 
+
+}
+.donationText{
+    padding-top: 100px;
+    min-width: 300px;
+    max-width: 500px;
+}
+.message {
+    text-indent: 10px;
+}
+h2, p {
+    font-family: "Raleway", sans-serif;
+}
