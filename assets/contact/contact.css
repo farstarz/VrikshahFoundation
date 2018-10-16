@@ -1,0 +1,20 @@
+.contactStyle {
+    margin-top: 50px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: rgba(242,239,233,.8);
+}
+.btnContact {
+    border-radius: 5px;
+    margin-top: 10px;
+    margin: 0 auto;
+}
+.infoContainer {
+    margin-top: 50px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: rgba(242,239,233,.8);
+}
+h5, h3 {
+    font-family: 'Raleway', sans-serif;
+}

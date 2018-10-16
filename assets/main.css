@@ -4,6 +4,7 @@
     position: fixed;
     background-color: #fff;
     margin-bottom: 50px;
+    z-index: 1000;
 }
 #logoBig {
     position: absolute;
@@ -13,17 +14,18 @@
 }
 #logoSmall {
     position: absolute;
-  
+    top: 0px;
     height: 75px;
     display: none;
 
 }
 .nav {
     padding-top: 8px;
-    width: 665px;
+    width: 650px;
     list-style: none;
     margin: 0 auto;
     justify-self: center;
+    display: none;
 }
 .nav-link {
     font-family: 'Cormorant Garamond', serif;
@@ -33,7 +35,7 @@
 
 .navBig{
     display: static;
-    width: 100%;
+    width: auto;
     margin-left: 24%;
 
 }
@@ -52,10 +54,8 @@ a:hover, a:focus {
 }
 
 .userProfile {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 45px;
+ 
+    margin-right: 10px;
     height: 45px;
     border: 2px solid black;
     border-radius: 50%;
@@ -70,6 +70,12 @@ a:hover, a:focus {
     color: #fff;
     margin: 35px;
     font-size: 3em;
+}
+
+#loggedInDropdown {
+    
+    margin-right: 5px;
+    display: none;
 }
 p, a {
     font-family: 'Raleway', sans-serif;
@@ -118,6 +124,9 @@ text-decoration: none;
     }
     .navBig {
         display: none;
+    }
+    .nav {
+        display: inline-block;
     }
     .navSmall {
         display: block;
