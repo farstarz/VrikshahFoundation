@@ -1,0 +1,135 @@
+.header {
+    height: 75px;
+    width: 100%;
+    position: fixed;
+    background-color: #fff;
+    margin-bottom: 50px;
+    z-index: 1000;
+}
+#logoBig {
+    position: absolute;
+    top: 5px;
+    height: 70px;
+
+}
+#logoSmall {
+    position: absolute;
+    top: 0px;
+    height: 75px;
+    display: none;
+
+}
+.nav {
+    padding-top: 8px;
+    width: 650px;
+    list-style: none;
+    margin: 0 auto;
+    justify-self: center;
+    display: none;
+}
+.nav-link {
+    font-family: 'Cormorant Garamond', serif;
+    color: #000;
+    font-size: 1.2em;
+}
+
+.navBig{
+    display: static;
+    width: auto;
+    margin-left: 24%;
+
+}
+.navSmall {
+    width: 100%;
+    display: none;
+    margin-left: 75px;
+}
+.dropdown-menu {
+    text-align: center;
+    margin-top: 23px;
+    padding: 0;
+}
+a:hover, a:focus {
+    color: inherit;
+}
+
+.userProfile {
+ 
+    margin-right: 10px;
+    height: 45px;
+    border: 2px solid black;
+    border-radius: 50%;
+    display: none;
+}
+.login {
+    margin-right: 25px;
+    display: block;
+}
+
+.login-header {
+    color: #fff;
+    margin: 35px;
+    font-size: 3em;
+}
+
+#loggedInDropdown {
+    
+    margin-right: 5px;
+    display: none;
+}
+p, a {
+    font-family: 'Raleway', sans-serif;
+}
+.mainContent {
+    padding-top: 75px;
+    background-image: url("images/backgroundVF.jpg");
+    height: 1000px;
+
+
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.foot {
+    height: 50px;
+    background-color: #fff;
+    padding-top: 10px;
+}
+.foot p, a {
+    padding-right: 5px;
+}
+.questions {
+    height: 100%;
+    margin-left: 30px;
+}
+.questions a:hover {
+text-decoration: none;
+}
+.socialContact {
+    margin-right: 30px;
+    padding-bottom: 15px;
+}
+.socialContact i {
+    padding-right: 10px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .header #logoBig {
+       display: none;
+    }
+    .header #logoSmall {
+        display: block;
+    }
+    .navBig {
+        display: none;
+    }
+    .nav {
+        display: inline-block;
+    }
+    .navSmall {
+        display: block;
+
+    }
+}

@@ -3,9 +3,12 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+
 // initialize moment.js for date functions
 var moment = require('moment');
 moment().format();
+
+admin.initializeApp(functions.config().firebase);
 
 
 // // Create and Deploy Your First Cloud Functions
@@ -24,6 +27,44 @@ exports.example = functions.database.ref('testing/{testId}').onCreate((snapshot,
   const uppercase = original.toUpperCase();
 
   return snapshot.ref.update( { id: uppercase});
+});
+
+exports.createUser = functions.auth.user().onCreate((user) => {
+
+    var newUser = new User(user.email, user.displayName, true, user.photoURL);
+    createRole(newUser.email);
+    return createUser(newUser);
+
+    function User(email, name, notificationsOn, photoUrl) {
+        this.email = email;
+        this.name = name;
+        this.notificationsOn = notificationsOn;
+        this.photoUrl = photoUrl;
+    }
+
+    function createUser(user) {
+        var usersRootObj = "users";
+        var userId = encodeAsFirebaseKey(user.email);
+        return admin.database().ref(usersRootObj).child(userId).set(user);
+    }
+
+    function createRole(email){
+        var userRolesObj = "roles";
+        var userId = encodeAsFirebaseKey(email);
+        admin.database().ref(userRolesObj).child(userId).set(0);    
+    } 
+
+    function encodeAsFirebaseKey(string) {
+        // Used to encode an email into a valid Firebase key.	
+        // This key will be used to quickly query for existing users using their emails.	
+        return string.replace(/\%/g, '%25')
+            .replace(/\./g, '%2E')
+            .replace(/\#/g, '%23')
+            .replace(/\$/g, '%24')
+            .replace(/\//g, '%2F')
+            .replace(/\[/g, '%5B')
+            .replace(/\]/g, '%5D');
+    }
 });
 
 exports.welcomeEmail = functions.database.ref('welcomeEmail/{welcomeID}').onCreate((snapshot, context) => {
@@ -132,40 +173,6 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
 
 
 
-    // get emails from firebase
-        // create a trigger at a certain time
-        // check today's data and store year month and date in variables
-
-        // in firebase check for corresponding year, corresponding month and corresponding date
-        // if snapshot exists, store the eventIDs in a array     *
-      // create array of emails for notification
-        // for each eventID, go to eventAttendees collection
-        // parse through all users, for every user with notification ON add userID to an array <lc>
-          // of objects with key set to recipient
-          //  for (var i =0; i<oldarray.length; i++){
-          //    newarray[i] = `{recipient:`+oldarray[i]+`}`;
-          //  }
-        // pass this array to sendEmail function
-    
-    // input this array as parameter in the sendEmail function
-
-
-
-
-
-//   return 0;
-// });
-
-// get date and time
-// var today = new Date();
-// today -= "0000-00-00T07:00:00.000Z";
-// var dd = today.getDate();
-// var mm = today.getMonth()+1;
-// var yyyy = today.getFullYear();
-// console.log(mm+'/'+dd+'/'+yyyy);
-
-
-// WRITE PSEUDOCODE FOR WELCOME EMAIL
 
 
 

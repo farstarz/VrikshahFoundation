@@ -1,3 +1,10 @@
+// Globals
+var currentUser = null; // If left null, no user is logged in.
+var currentUserRole = null;
+var currentUserStorageName = "currentUser";
+var currentUserRoleStorageName = "currentUserRole";
+var currentWindowStorageName = "currentWindow";
+
 // Initialize Firebase
 var firebase = require('firebase');
 // initialize moment.js for date functions
@@ -14,17 +21,12 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// Database root objects
-var usersRootObj = "users";
-var userEventsRootObj  = "userEvents";
-var eventsRootObj = "events";
-var attendeesRootObj = "attendees";
-
 // User Constructor
-function User(email, name, notificationsOn) {
+function User(email, name, notificationsOn, photoUrl) {
     this.email = email;
     this.name = name;
     this.notificationsOn = notificationsOn;
+    this.photoUrl = photoUrl;
 }
 
 // Event Constructor
@@ -35,11 +37,15 @@ function Event(date, description) {
 
 var firebaseDB = {
 
-    // TODO: 
-    // 1. Need to add error handling for database transactions.
-    // 2. Need to add firebase functions for user on create and on delete triggers.
-
     DB: firebase.database(),
+
+    // Database root objects
+    usersEventsRootObj: "userEvents",
+    usersRootObj: "users",
+    attendeesRootObj: "attendees",
+    eventsRootObj: "events",
+    userRolesRootObj: "roles",
+    errorLogRootObj: "errors",
 
     encodeAsFirebaseKey: function(string){
         // Used to encode an email into a valid Firebase key.
@@ -53,13 +59,11 @@ var firebaseDB = {
         .replace(/\]/g, '%5D');    
     },
 
-    createUser: function(user){
-        var userId = this.encodeAsFirebaseKey(user.email);        
-        this.DB.ref(usersRootObj).child(userId).set(user);  
-    },
-
     createEvent: function(eventId, event){
-        this.DB.ref(eventsRootObj).child(eventId).set(event);
+        this.DB.ref(this.eventsRootObj).child(eventId).set(event).catch(function(error){
+            alert('Failed to create event');
+            firebaseDB.logError(error);
+        });
     },
 
     registerUserForEvent: function(email, eventId){
@@ -68,12 +72,25 @@ var firebaseDB = {
         // { eventId: true }
         // This give us the ability to avoid duplicate events and a quick way to check if a user is 
         // registered for a particular event.
-        this.DB.ref(userEventsRootObj).child(userId).child(eventId).set(true);        
+        this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).set(true).catch(function(error){
+            alert('Failed to register the user for the event');
+            firebaseDB.logError(error);
+        });        
     },
 
     getUser: async function(email){
         var userId = this.encodeAsFirebaseKey(email);
-        var user = await this.DB.ref(usersRootObj).child(userId).once('value');
+        var user = await this.DB.ref(this.usersRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
+        return user.val();
+    },
+
+    getUserRole: async function(email){
+        var userId = this.encodeAsFirebaseKey(email);
+        var user = await this.DB.ref(this.userRolesRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         return user.val();
     },
 
@@ -83,17 +100,58 @@ var firebaseDB = {
 
     getUserEvents: async function(email){
         var userId = this.encodeAsFirebaseKey(email);
-        var userEvents = await this.DB.ref(userEventsRootObj).child(userId).once('value');
+        var userEvents = await this.DB.ref(this.usersEventsRootObj).child(userId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         // Returns null if user has not registered for any events.
         return await userEvents.val() === null ? null: Object.keys(userEvents.val());
     },
 
     isUserRegisteredForEvent: async function(email, eventId){
         var userId = this.encodeAsFirebaseKey(email);
-        var event = await this.DB.ref(userEventsRootObj).child(userId).child(eventId).once('value');
+        var event = await this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).once('value').catch(function(error){
+            firebaseDB.logError(error);
+        });
         return event.val() !== null;
+    },
+
+    logError: function(error){
+        // This function needs to ref the DB object directly and cannot use 'this'
+        // since it's intended to be called by a promise catch method.
+        var currentDateTime = new Date();
+        firebase.database().ref(firebaseDB.errorLogRootObj).push({
+            timestamp: currentDateTime.toString(),
+            error: error,
+        });
     }
 }
+
+// Initialize the page.
+async function pageInit(){
+    currentUser = JSON.parse(localStorage.getItem(currentUserStorageName));
+    
+    // Check if user is logged in.
+    if (currentUser){
+
+        // Get user role.
+        currentUserRole = localStorage.getItem(currentUserRoleStorageName);
+        if (currentUserRole === null){
+            currentUserRole = await firebaseDB.getUserRole(currentUser.email);            
+            localStorage.setItem(currentUserRoleStorageName, currentUserRole);
+        } else {
+            currentUserRole = parseInt(currentUserRole);
+        }
+
+        // UI needs to be updated accordingly if user is logged in.
+        updateUI(currentUser, currentUserRole);
+    }
+
+    // Current window ref needs to be cleared for all pages excluding the login page.
+    if (!window.location.href.toString().toLowerCase().includes("loginpage")){
+        localStorage.removeItem(currentWindowStorageName);
+    }
+}
+pageInit();
 
 async function isValidEmail(email) {
     // Verify email using the Pozzad Email Validator API.
@@ -109,10 +167,66 @@ async function isValidEmail(email) {
     return response.isValid;
 }
 
+// Used to return the user back to the original page they were on before 
+// logging in.
+
+$("#loginBtn").on('click', function(){
+    localStorage.setItem(currentWindowStorageName, window.location.href);
+});
+
+function updateUI(userLoggedIn, userRole) {
+    if (userLoggedIn) {
+        console.log("Update UI To show User Stuff");
+        // Show all user ui stuff
+        $(".userProfile").css({
+            "display": "inline-block",
+            "width": "45px",
+            "background-image": "url("+ currentUser.photoUrl+ ")"
+        })
+        $("#loginBtn").css({
+            "display": "none",
+           
+        })
+        $("#dropdownCaret").css({
+            "display": "inline-block",
+            "margin-right": "50px"
+            
+        })
+        // Depending on their role...we'll update the UI appropiately.
+
+    } else {
+        console.log("Update UI To hide User Stuff");
+        $(".userProfile").css({
+            "display": "none",
+           
+        })
+       
+        $("#loginBtn").css({
+            "display": "block"
+        })
+    
+        // hide user UI stuff
+    }
+}
+
+// TODO: Jake, you'll need to clean this up.
+$("#logOutLink").on('click', function () {
+    logoutUser();
+    console.log("User has been logged out");
+})
+
+function logoutUser() {
+    currentUser = null;
+    updateUI(false);
+    firebase.auth().signOut();
+    localStorage.removeItem(currentUserStorageName);
+    localStorage.removeItem(currentUserRoleStorageName);
+}
+
+
 
 // code of sending email notifications at 6AM day before the events
 // get time at hour 
-
 
 var timeWeWant = moment({ hour:21, minute:18 });
 var timeNow = moment();
@@ -140,4 +254,3 @@ function preTriggerSendEmail() {   //pretrigger with a dummy testID
     });
 }
 
-// preTriggerSendEmail();
