@@ -114,7 +114,7 @@ async function isValidEmail(email) {
 // get time at hour 
 
 
-var timeWeWant = moment({ hour:23, minute:28 });
+var timeWeWant = moment({ hour:19, minute:49 });
 var timeNow = moment();
 var offsetMillis = timeWeWant - timeNow;
 console.log(offsetMillis);
@@ -129,11 +129,15 @@ var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
 dd = parseInt(dd)+1;
 console.log(dd);
 function preTriggerSendEmail() {   //pretrigger with a dummy testID
-    firebaseDB.DB.ref(`/date/${yyyy}/${mm}/${dd}/eventID/testID`).once("value").then((snapshot)=>{
-        // snapshot.val() = "true";
-        console.log(snapshot.ref_.repo.app);
+    firebaseDB.DB.ref(`/dates/${yyyy}/${mm}/${dd}/eventID`).once("value").then((snapshot)=>{
+        // change testID to true to trigger the firebase sendEmailNotification function
+        snapshot.ref.update({"testID":true});
+        // reinitialize testID for the next run
+        snapshot.ref.update({"testID":false});
+        var ID = "testID";
+        console.log(snapshot.val());
         return(0);
     });
 }
 
-preTriggerSendEmail();
+// preTriggerSendEmail();
