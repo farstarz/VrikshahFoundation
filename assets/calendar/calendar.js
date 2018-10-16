@@ -1,18 +1,29 @@
 $(document).ready(function () {
+  
+    // Local globals
+    var admin = false;
+    var activeEventId = null;
 
-    var admin = true;
+    // Check if user is logged in.
     if (currentUser !== null){
-        
+        toggleUserButtons();
         if (currentUserRole > 0){
+            // Admin users have a role greater than zero.
+            displayAdminButtons();
             admin = true;
         }
     }
 
-    /** This is where we need to add code to check for Admin permissions. */
-    if (admin) {
+    function toggleUserButtons(){
+        // Toggles buttons that change the flow of user registration.
+        // TODO: Update this once UI is finished.
+    }
+
+    function displayAdminButtons(){
+        // Show admin buttons.
         $("#admin-add-event-btn").removeClass("d-none");
         $("#edit-event-btn").removeClass("d-none");
-    };
+    }
 
     var eventsArray = [];
     var placeid;
@@ -51,10 +62,11 @@ $(document).ready(function () {
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
             $("#edit-event-btn").attr("data-index", calEvent.index);
+          
             var myLatLng =  {lat: -33.8688, lng: 151.2195};
             initMap(calEvent.placeid, calEvent.geometry);
             $("#myModal").modal('toggle')
-            
+            activeEventId = calEvent.id;
         }
     });
 
@@ -286,5 +298,24 @@ $(document).ready(function () {
         eventsArray[index].end = moment(eventsArray[index].end).local();
         $("#calendar").fullCalendar('removeEvents')
         $("#calendar").fullCalendar('renderEvents', eventsArray, true)
+    });
+
+    // ** User Registration ** //
+    $("#modal-btn").on('click', function(){
+       
+       var userEmail = null;
+       var reminderOn = false;
+
+       if (currentUser === null){
+           userEmail = $("#userEmail").val();
+           reminderOn = $("#emailReminderOn").is(":checked");
+       } else {
+           userEmail = currentUser.email;
+           reminderOn = currentUser.notificationsOn
+       }
+
+       // PRODUCTION
+       firebaseDB.registerUserForEvent(userEmail, activeEventId, reminderOn);
+       $("#myModal").modal('toggle');
     });
 });

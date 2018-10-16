@@ -61,7 +61,7 @@ var firebaseDB = {
         });
     },
 
-    registerUserForEvent: function(email, eventId){
+    registerUserForEvent: function(email, eventId, reminderOn){
         var userId = this.encodeAsFirebaseKey(email);
         // Events that the user is registered for are stored as an object with the following format:
         // { eventId: true }
@@ -70,7 +70,13 @@ var firebaseDB = {
         this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).set(true).catch(function(error){
             alert('Failed to register the user for the event');
             firebaseDB.logError(error);
-        });        
+        });
+        
+        // Add user to list of event attendees.        
+        this.DB.ref(this.attendeesRootObj).child(eventId).child(userId).set(reminderOn).catch(function(error){
+            alert('Failed to add user to list of event attendees');
+            firebaseDB.logError(error);
+        });
     },
 
     getUser: async function(email){
