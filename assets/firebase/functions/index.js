@@ -73,18 +73,55 @@ var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
 dd = parseInt(dd)+1;
 console.log('year: '+yyyy+'month: '+mm+'day: '+dd);
 console.log("before trigger");
-var dateRef ="dates/"+yyyy+"/"+mm+"/"+dd+"/eventID";
-console.log(dateRef); 
-exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd+"/eventID").onWrite((snapshot, context)=> {
+exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd).onWrite((snapshot, context)=> {
   // if testID was changed
   // console.log(snapshot);
   console.log(snapshot.after._data.testID);
-  
+  var eventIDArr =[];
   // if today's date is 24 hours before an event
   if (snapshot.after._data.testID == true) { 
     console.log("run send email function");
+    console.log(snapshot._data);
+    eventIDArr = snapshot._data;
+    // remove testID from the event ID list
+    eventIDArr.pop();
+    console.log(eventIDArr);
+    
+    // send email function
+  //   var http = require("http");
+
+  //   var options = {
+  //     "method": "POST",
+  //     "hostname": "api.pepipost.com",
+  //     "port": null,
+  //     "path": "/v2/sendEmail",
+  //     "headers": {
+  //       "content-type": "application/json",
+  //       "api_key": "4a313664cc518338f18fe8391519b10d"
+  //     }
+  //   };
+
+  //   var req = http.request(options, function (res) {
+  //     var chunks = [];
+    
+  //     res.on("data", function (chunk) {
+  //       chunks.push(chunk);
+  //     });
+    
+  //     res.on("end", function () {
+  //       var body = Buffer.concat(chunks);
+  //       console.log(body.toString());
+  //     });
+  //   });
+
+  //   req.write(JSON.stringify({ personalizations:  [{recipient:'mlhe@ucdavis.edu'},{recipient:'vaibhav.pandey9890@gmail.com'}],
+  //     from: { fromEmail: 'farstarz@pepisandbox.com', fromName: 'farstarz' },
+  //     subject: 'Welcome to Pepipost',
+  //     content: 'Hi, this email is getting sent to multiple people TO MARGRATE and ILU THIS ONE' }));
+  //   req.end();  
+  //   return 0;
     console.log(snapshot);
-    //snapshot.testID = false;
+    snapshot.testID = false;
   }
 
   else {
