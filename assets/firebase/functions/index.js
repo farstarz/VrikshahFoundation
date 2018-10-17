@@ -125,7 +125,8 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
     console.log(snapshot._data);
     eventIDArr = snapshot._data;
     // remove testID from the event ID list
-    eventIDArr.pop();
+    console.log(eventIDArr);
+    // eventIDArr.splice(-1,1);
     console.log(eventIDArr);
     
     // send email function
