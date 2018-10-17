@@ -16,7 +16,6 @@ $(document).ready(function () {
 
     var eventsArray = [];
     var placeid;
-    var geometry;
 
     //initialize calendar
     $('#calendar').fullCalendar({
@@ -50,34 +49,43 @@ $(document).ready(function () {
             $("#end-time").text(calEvent.end);
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
-            $("#edit-event-btn").attr("data-index", calEvent.index);
-            var myLatLng =  {lat: -33.8688, lng: 151.2195};
-            initMap(calEvent.placeid, calEvent.geometry);
+            $("#edit-event-btn").attr("data-index", calEvent.index);            
+            initMap(calEvent.placeid);
             $("#myModal").modal('toggle')
             
         }
     });
 
     /**function to initialize map */
-    function initMap(id, location) {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: location
-        });
-
-        var marker = new google.maps.Marker({
-            map: map,
-            place: {
-                placeId: id,
-                location: location
-              }
-        });
-      }
+    function initMap(id) {
+        var request = {
+            placeId: id,
+            fields: ['geometry']
+          };
+          
+          service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+          function callback(place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 28.63576, lng: 77.22445},
+                    zoom: 15,
+                    mapTypeId: 'roadmap'
+                    
+                  });
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                  });
+            }
+          }
+    }
 
       function initAutocomplete(type) {
         var map = new google.maps.Map(document.getElementById(type+"Map"), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 28.63576, lng: 77.22445},
+          zoom: 15,
           mapTypeId: 'roadmap'
           
         });
@@ -97,7 +105,6 @@ $(document).ready(function () {
         // more details for that place.
         searchBox.addListener('places_changed', function() {
           var places = searchBox.getPlaces();
-          console.log("meow")
 
           if (places.length == 0) {
             return;
@@ -132,7 +139,8 @@ $(document).ready(function () {
               position: place.geometry.location
             }));
             placeid = place.place_id;
-            geometry = place.geometry.location;
+            console.log(placeid)
+            
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
               bounds.union(place.geometry.viewport);
@@ -168,7 +176,6 @@ $(document).ready(function () {
     $("#admin-add-event-btn").on("click", function () {
         $("#empty").hide();
         $("#add-col").show();
-        console.log("testing");
         $("#new-event-title").text("");
         $("#new-event-description").text("");
         $("#modal-btn").val("Add Event");
@@ -195,8 +202,7 @@ $(document).ready(function () {
             "description": description,
             "start": startTimeMoment.utc().format(),
             "end": endTimeMoment.utc().format(),
-            "placeid": placeid,
-            "geometry": geometry
+            "placeid": placeid
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
@@ -218,6 +224,9 @@ $(document).ready(function () {
 
     /** Cancel button, closes out modal and clears form values   */
     $("#dont-add-event-btn").on("click", function () {
+        closeAndClearEditModal();
+    });
+    $("#cancel-btn").on("click", function () {
         closeAndClearEditModal();
     });
 
@@ -243,6 +252,8 @@ $(document).ready(function () {
         var description = eventObject.description;
         var start = eventObject.start;
         var end = eventObject.end;
+        placeid = eventObject.placeid;
+        console.log(placeid)
         console.log(start);
         console.log(end);
         $("#edit-event-title").val(title);
@@ -275,7 +286,8 @@ $(document).ready(function () {
             "title": title,
             "description": description,
             "start": startTimeMoment.utc().format(),
-            "end": endTimeMoment.utc().format()
+            "end": endTimeMoment.utc().format(),
+            "placeid": placeid
         };
         firebaseDB.DB.ref('events').child(id).update(editEvent);
         var index = $("#edit-event-btn").data('index');
