@@ -1,4 +1,4 @@
-$(document).ready(function () {
+ $(document).ready(function () {
 
     var admin = true;
     if (currentUser !== null){
@@ -51,6 +51,7 @@ $(document).ready(function () {
             $("#edit-event-btn").attr("data-value", calEvent.id);
             $("#edit-event-btn").attr("data-index", calEvent.index);            
             initMap(calEvent.placeid);
+            placeid = calEvent.placeid;
             $("#myModal").modal('toggle')
             
         }
@@ -60,7 +61,7 @@ $(document).ready(function () {
     function initMap(id) {
         var request = {
             placeId: id,
-            fields: ['geometry']
+            fields: ['geometry', 'formatted_address']
           };
           
           service = new google.maps.places.PlacesService(map);
@@ -69,14 +70,20 @@ $(document).ready(function () {
           function callback(place, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 var map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 28.63576, lng: 77.22445},
+                    center: place.geometry.location,
                     zoom: 15,
                     mapTypeId: 'roadmap'
                     
                   });
+                  var infowindow = new google.maps.InfoWindow();
+
                 var marker = new google.maps.Marker({
                     map: map,
                     position: place.geometry.location
+                  });
+                  google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                    infowindow.open(map, this); 
                   });
             }
           }
@@ -89,6 +96,29 @@ $(document).ready(function () {
           mapTypeId: 'roadmap'
           
         });
+
+        if (type=="edit"){
+            var request = {
+                placeId: placeid,
+                fields: ['geometry', 'formatted_address']
+              };
+              service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+            function callback(place, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    var infowindow = new google.maps.InfoWindow();
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: place.geometry.location
+                    });
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                        infowindow.open(map, this); 
+                    });
+                }
+            }
+        }
 
         // Create the search box and link it to the UI element.
         var input = document.getElementById(type+'-pac-input');
@@ -139,7 +169,11 @@ $(document).ready(function () {
               position: place.geometry.location
             }));
             placeid = place.place_id;
-            console.log(placeid)
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(markers[0], 'click', function() {
+                infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                infowindow.open(map, this); 
+            });
             
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
