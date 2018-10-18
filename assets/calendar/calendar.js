@@ -56,16 +56,9 @@
             $("#end-time").text(calEvent.end);
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
-<<<<<<< HEAD
             $("#edit-event-btn").attr("data-index", calEvent.index);            
             initMap(calEvent.placeid);
             placeid = calEvent.placeid;
-=======
-            $("#edit-event-btn").attr("data-index", calEvent.index);
-          
-            var myLatLng =  {lat: -33.8688, lng: 151.2195};
-            initMap(calEvent.placeid, calEvent.geometry);
->>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
             $("#myModal").modal('toggle')
             activeEventId = calEvent.id;
         }
