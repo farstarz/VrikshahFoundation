@@ -81,6 +81,7 @@
                     map: map,
                     position: place.geometry.location
                   });
+                  $("#address").text(place.formatted_address);
                   google.maps.event.addListener(marker, 'click', function() {
                     infowindow.setContent('<div>' + place.formatted_address + '</div>');
                     infowindow.open(map, this); 
