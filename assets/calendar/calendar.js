@@ -1,12 +1,4 @@
-<<<<<<< HEAD
  $(document).ready(function () {
-=======
-$(document).ready(function () {
-  
-    // Local globals
-    var admin = false;
-    var activeEventId = null;
->>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
 
     // Check if user is logged in.
     if (currentUser !== null){
