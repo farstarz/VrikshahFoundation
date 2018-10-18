@@ -1,5 +1,8 @@
  $(document).ready(function () {
 
+    var admin = false;
+    var activeEventId = null;
+    
     // Check if user is logged in.
     if (currentUser !== null){
         toggleUserButtons();
