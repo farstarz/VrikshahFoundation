@@ -64,7 +64,7 @@ exports.createUser = functions.auth.user().onCreate((user) => {
             .replace(/\//g, '%2F')
             .replace(/\[/g, '%5B')
             .replace(/\]/g, '%5D');
-    }
+    }    
 });
 
 exports.welcomeEmail = functions.database.ref('welcomeEmail/{welcomeID}').onCreate((snapshot, context) => {
@@ -94,114 +94,121 @@ exports.welcomeEmail = functions.database.ref('welcomeEmail/{welcomeID}').onCrea
     });
   });
 
-  req.write(JSON.stringify({ personalizations:  [{recipient:'mlhe@ucdavis.edu'},{recipient:'vaibhav.pandey9890@gmail.com'}],
+  req.write(JSON.stringify({ personalizations:  [{recipient:'mlhe@ucdavis.edu'},{recipient:'margaretful@gmail.com'}],
     from: { fromEmail: 'farstarz@pepisandbox.com', fromName: 'farstarz' },
     subject: 'Welcome to Pepipost',
-    content: 'Hi, this email is getting sent to multiple people TO MARGRATE and ILU THIS ONE' }));
+    content: 'Hi, this email is getting sent to everyone who just signed up for Pepipost. Thank you again for signing up!' }));
   req.end();  
-  return 0;
 
+  return(0);
 }); // end welcome Email func
 
 
 //trigger time
 var timeNow = moment();
-// console.log(timeNow);
 var yyyy= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("YYYY");
 var mm= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("MM");
 var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
 // get the next day
 dd = parseInt(dd)+1;
-// console.log('year: '+yyyy+'month: '+mm+'day: '+dd);
-console.log("before trigger");
-exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd).onWrite((snapshot, context)=> {
-  // if testID was changed
-  // console.log(snapshot);
-  console.log(snapshot.after._data.testID);
-  var eventIDArr =[];
-  // if today's date is 24 hours before an event
-  if (snapshot.after._data.testID == true) { 
-    console.log("run send email function");
-    // console.log(snapshot.after._data);
+
+// Sends Email Notification Reminder to attendees 24 hours before event
+exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd).onWrite((snapshot, context)=> {    
+  if (snapshot.after._data.testID == true) {     // if testID was changed (if today's date is 24 hours before an event)
+    var eventIDArr = [];
+    // begin send email function
     var o = snapshot.after._data;
-    var i = 0;
-    Object.keys(o).forEach(function(key) {
-      var val = o[key];
-      // console.log(val);
-      eventIDArr[i]=val;
-      i++;
-    });
-    // remove testID from the event ID list
+    eventIDArr = Object.keys(o);                 // array holds all event IDs of events occuring tomorrow
+
+    // remove testID from the event ID list (used only for trigger purposes)
     eventIDArr.splice(-1,1);
-    // console.log(eventIDArr);
     
-    // for each eventID
+    // for each event occuring tomorrow, grab list of attendees
     eventIDArr.forEach((eventID)=>{
-    // return 
+    // return callback
       return admin.database().ref('/attendees/' + eventID+'/').once('value', (snapshot) => {
-      // get users for each eventID
-        // console.log(snapshot.val());
-        if(snapshot){
-          var emailArry = snapshot.val();
-          console.log(emailArry);
-          var j =0;
+        function encodeEmail(string) {	
+          return string.replace(/\%2E/g, '.');
+        }  
+
+        // get users for each eventID
+        if(snapshot){   // if snapshot exists
+          var emailObj = snapshot.val();
+          console.log(emailObj);
+          
           var emailList = [];
-          Object.keys(emailArry).forEach((email)=>{
-            if(email.val()==true){
-              console.log("email value is:"+email.val());
-              console.log(email.val());
-              emailList[j]=Object.keys(email)[j];
-            }
-            j++;
+          Object.keys(emailObj).forEach((email)=>{
+            var notification = emailObj[email];
+            if (notification == true){                // if user's notification setting is on
+              emailList.push(email);
+            } // end if notification
           });
+          
+          var i = 0;
+          emailList.forEach((email)=>{
+            emailList[i] = encodeEmail(email);
+            i++;
+          }); // end forEach in emailliST
           console.log(emailList);
-        }
-      });
-    });
-    // send email function
-    // var http = require("http");
 
-    // var options = {
-    //   "method": "POST",
-    //   "hostname": "api.pepipost.com",
-    //   "port": null,
-    //   "path": "/v2/sendEmail",
-    //   "headers": {
-    //     "content-type": "application/json",
-    //     "api_key": "4a313664cc518338f18fe8391519b10d"
-    //   }
-    // };
+          // create array of objects of {recipient: email}
+          var emailObjArr = [];
+          emailList.forEach((recipient)=>{    // emailList structure: ['mlhe@ucdavis.edu', 'vaibhav.pandey9890@gmail.com']  
+            var recipientObj = {
+              "recipient": recipient
+            } // end recipientObj
+            emailObjArr.push(recipientObj);
+          }); // end for each recipient
+          console.log(emailObjArr);
 
-    // var req = http.request(options, function (res) {
-    //   var chunks = [];
-    
-    //   res.on("data", function (chunk) {
-    //     chunks.push(chunk);
-    //   });
-    
-    //   res.on("end", function () {
-    //     var body = Buffer.concat(chunks);
-    //     console.log(body.toString());
-    //   });
-    // });
 
-    // req.write(JSON.stringify({ personalizations:  [{recipient:'mlhe@ucdavis.edu'},{recipient:'vaibhav.pandey9890@gmail.com'}],
-    //   from: { fromEmail: 'farstarz@pepisandbox.com', fromName: 'farstarz' },
-    //   subject: 'Welcome to Pepipost',
-    //   content: 'Hi, this email is getting sent to multiple people TO MARGRATE and ILU THIS ONE' }));
-    // req.end();  
-    // return 0;
-    // console.log(snapshot);
-    // snapshot.testID = false;
-  } else {
-    console.log('you have an error in your code :(');
+          // send email using pepipost API
+          var http = require("http");
+
+          var options = {
+            "method": "POST",
+            "hostname": "api.pepipost.com",
+            "port": null,
+            "path": "/v2/sendEmail",
+            "headers": {
+              "content-type": "application/json",
+              "api_key": "4a313664cc518338f18fe8391519b10d"
+            }
+          };
+
+          var req = http.request(options, function (res) {
+            var chunks = [];
+          
+            res.on("data", function (chunk) {
+              chunks.push(chunk);
+            });
+          
+            res.on("end", function () {
+              var body = Buffer.concat(chunks);
+              console.log(body.toString());
+            });
+          });
+
+          // pass in emailObjArr to personalizations
+
+          req.write(JSON.stringify({ personalizations: emailObjArr,
+            from: { fromEmail: 'farstarz@pepisandbox.com', fromName: 'farstarz' },
+            subject: 'Event Reminder Tomorrow',
+            content: 'Hi, this email is getting sent to multiple people from an automated service, reminding you that the event you signed up for is occuring tomorrow at 3pm. Have a great day!' }));
+          req.end();  
+          snapshot.testID = false;
+          return(0);
+        }  // end if(snapshot)
+      }); // end return
+    });  // end forEach EventID
+    return(0);
+  } // end main if (testID == true)
+
+  else {
+    console.log('else statement executed because this particular event has no users signed up');
     return(0);
   }
     
 }); 
-
-
-
-
 
 

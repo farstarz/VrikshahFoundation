@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 var firebase = require('firebase');
 
@@ -37,7 +36,7 @@ var firebaseDB = {
 // code of sending email notifications at 6AM day before the events
 // get time at hour 
 
-var timeWeWant = moment({ hour:01, minute:01 });
+var timeWeWant = moment({ hour:05, minute:09 });
 var timeNow = moment();
 var offsetMillis = timeWeWant - timeNow;
 console.log(offsetMillis);
