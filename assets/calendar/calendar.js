@@ -1,8 +1,12 @@
+<<<<<<< HEAD
+ $(document).ready(function () {
+=======
 $(document).ready(function () {
   
     // Local globals
     var admin = false;
     var activeEventId = null;
+>>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
 
     // Check if user is logged in.
     if (currentUser !== null){
@@ -27,7 +31,6 @@ $(document).ready(function () {
 
     var eventsArray = [];
     var placeid;
-    var geometry;
 
     //initialize calendar
     $('#calendar').fullCalendar({
@@ -61,38 +64,84 @@ $(document).ready(function () {
             $("#end-time").text(calEvent.end);
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
+<<<<<<< HEAD
+            $("#edit-event-btn").attr("data-index", calEvent.index);            
+            initMap(calEvent.placeid);
+            placeid = calEvent.placeid;
+=======
             $("#edit-event-btn").attr("data-index", calEvent.index);
           
             var myLatLng =  {lat: -33.8688, lng: 151.2195};
             initMap(calEvent.placeid, calEvent.geometry);
+>>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
             $("#myModal").modal('toggle')
             activeEventId = calEvent.id;
         }
     });
 
     /**function to initialize map */
-    function initMap(id, location) {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: location
-        });
+    function initMap(id) {
+        var request = {
+            placeId: id,
+            fields: ['geometry', 'formatted_address']
+          };
+          
+          service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+          function callback(place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: place.geometry.location,
+                    zoom: 15,
+                    mapTypeId: 'roadmap'
+                    
+                  });
+                  var infowindow = new google.maps.InfoWindow();
 
-        var marker = new google.maps.Marker({
-            map: map,
-            place: {
-                placeId: id,
-                location: location
-              }
-        });
-      }
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                  });
+                  $("#address").text(place.formatted_address);
+                  google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                    infowindow.open(map, this); 
+                  });
+            }
+          }
+    }
 
       function initAutocomplete(type) {
         var map = new google.maps.Map(document.getElementById(type+"Map"), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 28.63576, lng: 77.22445},
+          zoom: 15,
           mapTypeId: 'roadmap'
           
         });
+
+        if (type=="edit"){
+            var request = {
+                placeId: placeid,
+                fields: ['geometry', 'formatted_address']
+              };
+              service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+            function callback(place, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    var infowindow = new google.maps.InfoWindow();
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: place.geometry.location
+                    });
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                        infowindow.open(map, this); 
+                    });
+                }
+            }
+        }
 
         // Create the search box and link it to the UI element.
         var input = document.getElementById(type+'-pac-input');
@@ -109,7 +158,6 @@ $(document).ready(function () {
         // more details for that place.
         searchBox.addListener('places_changed', function() {
           var places = searchBox.getPlaces();
-          console.log("meow")
 
           if (places.length == 0) {
             return;
@@ -144,7 +192,12 @@ $(document).ready(function () {
               position: place.geometry.location
             }));
             placeid = place.place_id;
-            geometry = place.geometry.location;
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(markers[0], 'click', function() {
+                infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                infowindow.open(map, this); 
+            });
+            
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
               bounds.union(place.geometry.viewport);
@@ -180,7 +233,6 @@ $(document).ready(function () {
     $("#admin-add-event-btn").on("click", function () {
         $("#empty").hide();
         $("#add-col").show();
-        console.log("testing");
         $("#new-event-title").text("");
         $("#new-event-description").text("");
         $("#modal-btn").val("Add Event");
@@ -207,8 +259,7 @@ $(document).ready(function () {
             "description": description,
             "start": startTimeMoment.utc().format(),
             "end": endTimeMoment.utc().format(),
-            "placeid": placeid,
-            "geometry": geometry
+            "placeid": placeid
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
@@ -230,6 +281,9 @@ $(document).ready(function () {
 
     /** Cancel button, closes out modal and clears form values   */
     $("#dont-add-event-btn").on("click", function () {
+        closeAndClearEditModal();
+    });
+    $("#cancel-btn").on("click", function () {
         closeAndClearEditModal();
     });
 
@@ -255,6 +309,8 @@ $(document).ready(function () {
         var description = eventObject.description;
         var start = eventObject.start;
         var end = eventObject.end;
+        placeid = eventObject.placeid;
+        console.log(placeid)
         console.log(start);
         console.log(end);
         $("#edit-event-title").val(title);
@@ -287,7 +343,8 @@ $(document).ready(function () {
             "title": title,
             "description": description,
             "start": startTimeMoment.utc().format(),
-            "end": endTimeMoment.utc().format()
+            "end": endTimeMoment.utc().format(),
+            "placeid": placeid
         };
         firebaseDB.DB.ref('events').child(id).update(editEvent);
         var index = $("#edit-event-btn").data('index');
