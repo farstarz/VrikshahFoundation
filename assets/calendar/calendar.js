@@ -1,13 +1,6 @@
-<<<<<<< HEAD
  $(document).ready(function () {
-=======
-$(document).ready(function () {
-  
-    // Local globals
-    var admin = false;
-    var activeEventId = null;
->>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
-
+var currentUserRole = 2;
+var currentUser = "hji"
     // Check if user is logged in.
     if (currentUser !== null){
         toggleUserButtons();
@@ -64,16 +57,9 @@ $(document).ready(function () {
             $("#end-time").text(calEvent.end);
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
-<<<<<<< HEAD
             $("#edit-event-btn").attr("data-index", calEvent.index);            
             initMap(calEvent.placeid);
             placeid = calEvent.placeid;
-=======
-            $("#edit-event-btn").attr("data-index", calEvent.index);
-          
-            var myLatLng =  {lat: -33.8688, lng: 151.2195};
-            initMap(calEvent.placeid, calEvent.geometry);
->>>>>>> e28782d82e66022a0d07fdea98f7d2f3748ce1cf
             $("#myModal").modal('toggle')
             activeEventId = calEvent.id;
         }
@@ -263,6 +249,10 @@ $(document).ready(function () {
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
+        var startDay = startDate.format("DD")
+        var startMonth = startDate.format("MM")
+        var startYear = startDate.format("YYYY")
+        firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(key).set(key);
         $("#new-event-title").val("");
         $("#new-event-date").val("");
         $("#new-event-time").val("");
@@ -327,16 +317,29 @@ $(document).ready(function () {
 
     $("#submit-edit-event-btn").on("click", function () {
         var id = $("#edit-event-btn").data('value');
+        var eventObject = $("#calendar").fullCalendar('clientEvents', id)[0];
         var title = $("#edit-event-title").val();
         var description = $("#edit-event-description").val();
         var startDate = $("#edit-event-date").val();
         var startTime = $("#edit-event-time").val();
         var endDate = $("#edit-event-end-date").val();
-        var endTime = $("#edit-event-end-time").val();
+        var endTime = $("#edit-event-end-time").val();        
         $("#empty").show();        
         $("#edit-col").hide();
         var dateString = startDate + " " + startTime;
         var startTimeMoment = moment(dateString);
+        var oldStart = eventObject.start;        
+        // checks to see if the month or day has changed. if so, removes the old event from dates and adds the event to the correct date
+        if (oldStart.format("MM-DD") != startTimeMoment.format("MM-DD")) {
+            var startDay = oldStart.format("DD")
+            var startMonth = oldStart.format("MM")
+            var startYear = oldStart.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(null);
+            var startDay = startTimeMoment.format("DD")
+            var startMonth = startTimeMoment.format("MM")
+            var startYear = startTimeMoment.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(id);
+        }
         var endDateString = endDate + " " + endTime;
         var endTimeMoment = moment(endDateString);
         var editEvent = {
