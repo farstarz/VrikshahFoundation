@@ -251,6 +251,10 @@
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
+        var startDay = startDate.format("DD")
+        var startMonth = startDate.format("MM")
+        var startYear = startDate.format("YYYY")
+        firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(key).set(key);
         $("#new-event-title").val("");
         $("#new-event-date").val("");
         $("#new-event-time").val("");
@@ -315,16 +319,29 @@
 
     $("#submit-edit-event-btn").on("click", function () {
         var id = $("#edit-event-btn").data('value');
+        var eventObject = $("#calendar").fullCalendar('clientEvents', id)[0];
         var title = $("#edit-event-title").val();
         var description = $("#edit-event-description").val();
         var startDate = $("#edit-event-date").val();
         var startTime = $("#edit-event-time").val();
         var endDate = $("#edit-event-end-date").val();
-        var endTime = $("#edit-event-end-time").val();
+        var endTime = $("#edit-event-end-time").val();        
         $("#empty").show();        
         $("#edit-col").hide();
         var dateString = startDate + " " + startTime;
         var startTimeMoment = moment(dateString);
+        var oldStart = eventObject.start;        
+        // checks to see if the month or day has changed. if so, removes the old event from dates and adds the event to the correct date
+        if (oldStart.format("MM-DD") != startTimeMoment.format("MM-DD")) {
+            var startDay = oldStart.format("DD")
+            var startMonth = oldStart.format("MM")
+            var startYear = oldStart.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(null);
+            var startDay = startTimeMoment.format("DD")
+            var startMonth = startTimeMoment.format("MM")
+            var startYear = startTimeMoment.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(id);
+        }
         var endDateString = endDate + " " + endTime;
         var endTimeMoment = moment(endDateString);
         var editEvent = {
