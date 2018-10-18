@@ -179,6 +179,9 @@ function updateUI(userLoggedIn, userRole) {
     if (userLoggedIn) {
         console.log("Update UI To show User Stuff");
         // Show all user ui stuff
+        $(".dropdownHide").css({
+            "display": "inline-block"
+        })
         $(".userProfile").css({
             "display": "inline-block",
             "width": "45px",
@@ -193,6 +196,7 @@ function updateUI(userLoggedIn, userRole) {
             "margin-right": "50px"
             
         })
+
         // Depending on their role...we'll update the UI appropiately.
 
     } else {

@@ -75,8 +75,20 @@ a:hover, a:focus {
 #loggedInDropdown {
     
     margin-right: 5px;
+    display: none !important;
+}
+.settingsStyle {
+    padding: 10px;
+}
+.dropdownHide {
     display: none;
 }
+.logOutBtnStyle {
+margin-bottom: 5px;
+    border-radius: 5px;
+    color: #000
+}
+
 p, a {
     font-family: 'Raleway', sans-serif;
 }
