@@ -36,7 +36,7 @@ var firebaseDB = {
 // code of sending email notifications at 6AM day before the events
 // get time at hour 
 
-var timeWeWant = moment({ hour:05, minute:09 });
+var timeWeWant = moment({ hour:00, minute:12 });
 var timeNow = moment();
 var offsetMillis = timeWeWant - timeNow;
 console.log(offsetMillis);
