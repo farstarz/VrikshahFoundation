@@ -1,4 +1,5 @@
 var currentWindow = localStorage.getItem(currentWindowStorageName);
+console.log(currentUser);
 
 function verifyEntryPoint() {
     if (currentWindow === null) {
