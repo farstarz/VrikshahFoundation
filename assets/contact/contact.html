@@ -31,54 +31,64 @@
 
     <div class="header d-flex align-items-center">
         <a href="../../homePage.html">
-        <img src="../images/logoDesktop.jpg" alt="logo" id="logoBig">
-        <img src="../images/logoMobile.jpg" alt="logo" id="logoSmall">
-    </a>
-        <!--Nav-->
-        <div class="navBig">
-        <ul class="nav d-flex justify-content-between ">
-            <li class="nav-item">
-                <a class="nav-link" href="../calendar/calendar.html">calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../contact/contact.html">contact</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../donation/donations.html">donate</a>
-            </li>
-        </ul>
-    </div>
-        <!--Mobile-->
-  <div class="nav">
-        <div class="dropdown navSmall">
-                <btn class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bars"></i>
-                </btn>
-              
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-               
-                        <a class="nav-link" href="../eventsAndActivities/eventsAndActivities.html">events</a>
-                        <a class="nav-link" href="../calendar/calendar.html">calendar</a>
-                                <a class="nav-link" href="../contact/contact.html">contact</a>
-                          
+                <img src="../images/logoDesktop.jpg" alt="logo" id="logoBig">
+                <img src="../images/logoMobile.jpg" alt="logo" id="logoSmall">
+            </a>
+                <!--Nav-->
+                <div class="navBig">
+                    <ul class="nav d-flex justify-content-between ">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../calendar/calendar.html">calendar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../contact/contact.html">contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../donation/donations.html">donate</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Mobile-->
+                <div class="nav">
+                    <div class="dropdown navSmall">
+                        <btn class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fas fa-bars"></i>
+                        </btn>
+        
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        
+                            <a class="nav-link" href="../calendar/calendar.html">calendar</a>
+                            <a class="nav-link" href="../contact/contact.html">contact</a>
+        
                             <a class="nav-link" href="../donation/donations.html">donate</a>
                         </div>
+                    </div>
+        
                 </div>
-              
+                <!--End  Nav-->
+        
+                <a href="../loginPage/loginPage.html" class="ml-auto">
+                    <button type="button" class="btn btn-outline-dark login " id="loginBtn">Login</button>
+                </a>
+        
+                <div class="dropdown ml-auto dropdownHide" id="loggedInDrowndown">
+            
+        
+        
+                <div class="userProfile ml-auto" data-toggle="dropdown">
+                    </div>
+            
+        
+                        <ul class="dropdown-menu settingsStyle">
+                          <li><button id="logOutLink" class="logOutBtnStyle">Logout</button></li>
+                        </ul>
+                      </div>
+            
+        
+        
+        
             </div>
-        <!--End  Nav-->
-        <div class="dropdown" id="loggedInDrowndown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><button id="logOutLink">Logout</button></li>
-              <li><a href="">Settings</a></li>
-            </ul>
-          </div>
-
-        <div class="userProfile">
-        </div>
-    </div>
 
     <!--End Header-->
 

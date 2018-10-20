@@ -1,13 +1,14 @@
 #calendar {
     max-width: 800px;
-    margin: auto;
+    margin: 20px auto;
     background: rgb(255,255,255);
     padding: 20px;
     border-radius: 15px;
   }
   #map, #newMap, #editMap {
-    height: 40vh;
-    width: 50vw;
+    height: 400px;
+    width: 680px;
+    margin: 10px;
     position: initial;
   }
 
@@ -25,4 +26,5 @@
 #add-col, #edit-col {
   display: none;
   background: white;
+  margin: 20px auto;
 }

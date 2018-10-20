@@ -1,22 +1,32 @@
-$(document).ready(function () {
+ $(document).ready(function () {
 
     var admin = true;
+    var activeEventId = null;
+    displayAdminButtons();
+
+    // Check if user is logged in.
     if (currentUser !== null){
-        
+        toggleUserButtons();
         if (currentUserRole > 0){
+            // Admin users have a role greater than zero.
+            displayAdminButtons();
             admin = true;
         }
     }
 
-    /** This is where we need to add code to check for Admin permissions. */
-    if (admin) {
+    function toggleUserButtons(){
+        // Toggles buttons that change the flow of user registration.
+        // TODO: Update this once UI is finished.
+    }
+
+    function displayAdminButtons(){
+        // Show admin buttons.
         $("#admin-add-event-btn").removeClass("d-none");
         $("#edit-event-btn").removeClass("d-none");
-    };
+    }
 
     var eventsArray = [];
     var placeid;
-    var geometry;
 
     //initialize calendar
     $('#calendar').fullCalendar({
@@ -47,40 +57,82 @@ $(document).ready(function () {
             if (!admin) $("#edit-event-btn").hide();
             $("#event-title").text(calEvent.title);
             $("#start-time").text(calEvent.start);
+            $("#start-time").text("Start time: " + $("#start-time").text());
             $("#end-time").text(calEvent.end);
+            $("#end-time").text("End time: "+$("#end-time").text());
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
-            $("#edit-event-btn").attr("data-index", calEvent.index);
-            var myLatLng =  {lat: -33.8688, lng: 151.2195};
-            initMap(calEvent.placeid, calEvent.geometry);
+            $("#edit-event-btn").attr("data-index", calEvent.index);            
+            initMap(calEvent.placeid);
+            placeid = calEvent.placeid;
             $("#myModal").modal('toggle')
-            
+            activeEventId = calEvent.id;
         }
     });
 
     /**function to initialize map */
-    function initMap(id, location) {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: location
-        });
+    function initMap(id) {
+        var request = {
+            placeId: id,
+            fields: ['geometry', 'formatted_address']
+          };
+          
+          service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+          function callback(place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: place.geometry.location,
+                    zoom: 15,
+                    mapTypeId: 'roadmap'
+                    
+                  });
+                  var infowindow = new google.maps.InfoWindow();
 
-        var marker = new google.maps.Marker({
-            map: map,
-            place: {
-                placeId: id,
-                location: location
-              }
-        });
-      }
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                  });
+                  $("#address").text("Location: "+place.formatted_address);
+                  google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                    infowindow.open(map, this); 
+                  });
+            }
+          }
+    }
 
       function initAutocomplete(type) {
         var map = new google.maps.Map(document.getElementById(type+"Map"), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 28.63576, lng: 77.22445},
+          zoom: 15,
           mapTypeId: 'roadmap'
           
         });
+
+        if (type=="edit"){
+            var request = {
+                placeId: placeid,
+                fields: ['geometry', 'formatted_address']
+              };
+              service = new google.maps.places.PlacesService(map);
+          service.getDetails(request, callback);
+          
+            function callback(place, status) {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    var infowindow = new google.maps.InfoWindow();
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: place.geometry.location
+                    });
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                        infowindow.open(map, this); 
+                    });
+                }
+            }
+        }
 
         // Create the search box and link it to the UI element.
         var input = document.getElementById(type+'-pac-input');
@@ -97,7 +149,6 @@ $(document).ready(function () {
         // more details for that place.
         searchBox.addListener('places_changed', function() {
           var places = searchBox.getPlaces();
-          console.log("meow")
 
           if (places.length == 0) {
             return;
@@ -132,7 +183,12 @@ $(document).ready(function () {
               position: place.geometry.location
             }));
             placeid = place.place_id;
-            geometry = place.geometry.location;
+            var infowindow = new google.maps.InfoWindow();
+            google.maps.event.addListener(markers[0], 'click', function() {
+                infowindow.setContent('<div>' + place.formatted_address + '</div>');
+                infowindow.open(map, this); 
+            });
+            
             if (place.geometry.viewport) {
               // Only geocodes have viewport.
               bounds.union(place.geometry.viewport);
@@ -168,7 +224,6 @@ $(document).ready(function () {
     $("#admin-add-event-btn").on("click", function () {
         $("#empty").hide();
         $("#add-col").show();
-        console.log("testing");
         $("#new-event-title").text("");
         $("#new-event-description").text("");
         $("#modal-btn").val("Add Event");
@@ -195,11 +250,14 @@ $(document).ready(function () {
             "description": description,
             "start": startTimeMoment.utc().format(),
             "end": endTimeMoment.utc().format(),
-            "placeid": placeid,
-            "geometry": geometry
+            "placeid": placeid
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
+        var startDay = startDate.format("DD")
+        var startMonth = startDate.format("MM")
+        var startYear = startDate.format("YYYY")
+        firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(key).set(key);
         $("#new-event-title").val("");
         $("#new-event-date").val("");
         $("#new-event-time").val("");
@@ -218,6 +276,9 @@ $(document).ready(function () {
 
     /** Cancel button, closes out modal and clears form values   */
     $("#dont-add-event-btn").on("click", function () {
+        closeAndClearEditModal();
+    });
+    $("#cancel-btn").on("click", function () {
         closeAndClearEditModal();
     });
 
@@ -243,6 +304,8 @@ $(document).ready(function () {
         var description = eventObject.description;
         var start = eventObject.start;
         var end = eventObject.end;
+        placeid = eventObject.placeid;
+        console.log(placeid)
         console.log(start);
         console.log(end);
         $("#edit-event-title").val(title);
@@ -259,23 +322,37 @@ $(document).ready(function () {
 
     $("#submit-edit-event-btn").on("click", function () {
         var id = $("#edit-event-btn").data('value');
+        var eventObject = $("#calendar").fullCalendar('clientEvents', id)[0];
         var title = $("#edit-event-title").val();
         var description = $("#edit-event-description").val();
         var startDate = $("#edit-event-date").val();
         var startTime = $("#edit-event-time").val();
         var endDate = $("#edit-event-end-date").val();
-        var endTime = $("#edit-event-end-time").val();
+        var endTime = $("#edit-event-end-time").val();        
         $("#empty").show();        
         $("#edit-col").hide();
         var dateString = startDate + " " + startTime;
         var startTimeMoment = moment(dateString);
+        var oldStart = eventObject.start;        
+        // checks to see if the month or day has changed. if so, removes the old event from dates and adds the event to the correct date
+        if (oldStart.format("MM-DD") != startTimeMoment.format("MM-DD")) {
+            var startDay = oldStart.format("DD")
+            var startMonth = oldStart.format("MM")
+            var startYear = oldStart.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(null);
+            var startDay = startTimeMoment.format("DD")
+            var startMonth = startTimeMoment.format("MM")
+            var startYear = startTimeMoment.format("YYYY")
+            firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(id).set(id);
+        }
         var endDateString = endDate + " " + endTime;
         var endTimeMoment = moment(endDateString);
         var editEvent = {
             "title": title,
             "description": description,
             "start": startTimeMoment.utc().format(),
-            "end": endTimeMoment.utc().format()
+            "end": endTimeMoment.utc().format(),
+            "placeid": placeid
         };
         firebaseDB.DB.ref('events').child(id).update(editEvent);
         var index = $("#edit-event-btn").data('index');
@@ -286,5 +363,24 @@ $(document).ready(function () {
         eventsArray[index].end = moment(eventsArray[index].end).local();
         $("#calendar").fullCalendar('removeEvents')
         $("#calendar").fullCalendar('renderEvents', eventsArray, true)
+    });
+
+    // ** User Registration ** //
+    $("#modal-btn").on('click', function(){
+       
+       var userEmail = null;
+       var reminderOn = false;
+
+       if (currentUser === null){
+           userEmail = $("#userEmail").val();
+           reminderOn = $("#emailReminderOn").is(":checked");
+       } else {
+           userEmail = currentUser.email;
+           reminderOn = currentUser.notificationsOn
+       }
+
+       // PRODUCTION
+       firebaseDB.registerUserForEvent(userEmail, activeEventId, reminderOn);
+       $("#myModal").modal('toggle');
     });
 });
