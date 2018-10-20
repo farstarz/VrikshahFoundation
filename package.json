@@ -1,0 +1,27 @@
+{
+  "name": "vrikshahfoundationexpress",
+  "version": "1.0.0",
+  "description": "Production Website for Vrikshah Foundation",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "keywords": [
+    "environment",
+    "trees",
+    "India"
+  ],
+  "author": "Vaibhav Pandey, Angel Aquas, Margaret He, Jake Adler, German Pineda, Lynn Thompson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farstarz/VrikshahFoundation/issues"
+  },
+  "homepage": "https://github.com/farstarz/VrikshahFoundation#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "firebase": "^5.5.4"
+  }
+}
