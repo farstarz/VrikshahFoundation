@@ -1,8 +1,9 @@
  $(document).ready(function () {
 
-    var admin = false;
+    var admin = true;
     var activeEventId = null;
-    
+    displayAdminButtons();
+
     // Check if user is logged in.
     if (currentUser !== null){
         toggleUserButtons();
@@ -56,7 +57,9 @@
             if (!admin) $("#edit-event-btn").hide();
             $("#event-title").text(calEvent.title);
             $("#start-time").text(calEvent.start);
+            $("#start-time").text("Start time: " + $("#start-time").text());
             $("#end-time").text(calEvent.end);
+            $("#end-time").text("End time: "+$("#end-time").text());
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
             $("#edit-event-btn").attr("data-index", calEvent.index);            
@@ -91,7 +94,7 @@
                     map: map,
                     position: place.geometry.location
                   });
-                  $("#address").text(place.formatted_address);
+                  $("#address").text("Location: "+place.formatted_address);
                   google.maps.event.addListener(marker, 'click', function() {
                     infowindow.setContent('<div>' + place.formatted_address + '</div>');
                     infowindow.open(map, this); 
