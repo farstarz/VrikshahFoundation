@@ -20,7 +20,6 @@
 
     function displayAdminButtons(){
         // Show admin buttons.
-        console.log("testing");
         $("#admin-add-event-btn").removeClass("d-none");
         $("#edit-event-btn").removeClass("d-none");
     }

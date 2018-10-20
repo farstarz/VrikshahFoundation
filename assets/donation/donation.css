@@ -15,3 +15,9 @@
 h2, p {
     font-family: "Raleway", sans-serif;
 }
+
+@media only screen and (max-width: 1000px) {
+    .donationText {
+        display: none;
+    }
+}

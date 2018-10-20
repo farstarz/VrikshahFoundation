@@ -6,7 +6,6 @@ var currentUserRoleStorageName = "currentUserRole";
 var currentWindowStorageName = "currentWindow";
 
 // Initialize Firebase
-
 var config = {
     apiKey: "AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4",
     authDomain: "vrikshahfoundation-afc36.firebaseapp.com",
@@ -86,46 +85,46 @@ var firebaseDB = {
                 firebaseDB.logError(error);
             });
             return user.val();
-        },
+    },
 
-        getUserRole: async function (email) {
-                var userId = this.encodeAsFirebaseKey(email);
-                var user = await this.DB.ref(this.userRolesRootObj).child(userId).once('value').catch(function (error) {
-                    firebaseDB.logError(error);
-                });
-                return user.val();
-            },
+    getUserRole: async function (email) {
+            var userId = this.encodeAsFirebaseKey(email);
+            var user = await this.DB.ref(this.userRolesRootObj).child(userId).once('value').catch(function (error) {
+                firebaseDB.logError(error);
+            });
+            return user.val();
+    },
 
-            userExists: async function (email) {
-                    return await this.getUser(email) !== null;
-                },
+    userExists: async function (email) {
+            return await this.getUser(email) !== null;
+    },
 
-                getUserEvents: async function (email) {
-                        var userId = this.encodeAsFirebaseKey(email);
-                        var userEvents = await this.DB.ref(this.usersEventsRootObj).child(userId).once('value').catch(function (error) {
-                            firebaseDB.logError(error);
-                        });
-                        // Returns null if user has not registered for any events.
-                        return await userEvents.val() === null ? null : Object.keys(userEvents.val());
-                    },
+    getUserEvents: async function (email) {
+            var userId = this.encodeAsFirebaseKey(email);
+            var userEvents = await this.DB.ref(this.usersEventsRootObj).child(userId).once('value').catch(function (error) {
+                firebaseDB.logError(error);
+            });
+            // Returns null if user has not registered for any events.
+            return await userEvents.val() === null ? null : Object.keys(userEvents.val());
+    },
 
-                    isUserRegisteredForEvent: async function (email, eventId) {
-                            var userId = this.encodeAsFirebaseKey(email);
-                            var event = await this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).once('value').catch(function (error) {
-                                firebaseDB.logError(error);
-                            });
-                            return event.val() !== null;
-                        },
+    isUserRegisteredForEvent: async function (email, eventId) {
+            var userId = this.encodeAsFirebaseKey(email);
+            var event = await this.DB.ref(this.usersEventsRootObj).child(userId).child(eventId).once('value').catch(function (error) {
+                firebaseDB.logError(error);
+            });
+            return event.val() !== null;
+    },
 
-                        logError: function (error) {
-                            // This function needs to ref the DB object directly and cannot use 'this'
-                            // since it's intended to be called by a promise catch method.
-                            var currentDateTime = new Date();
-                            firebase.database().ref(firebaseDB.errorLogRootObj).push({
-                                timestamp: currentDateTime.toString(),
-                                error: error,
-                            });
-                        }
+    logError: function (error) {
+        // This function needs to ref the DB object directly and cannot use 'this'
+        // since it's intended to be called by a promise catch method.
+        var currentDateTime = new Date();
+        firebase.database().ref(firebaseDB.errorLogRootObj).push({
+            timestamp: currentDateTime.toString(),
+            error: error,
+        });
+    }
 }
 
 // Initialize the page.
@@ -171,18 +170,16 @@ async function isValidEmail(email) {
 
 // Used to return the user back to the original page they were on before 
 // logging in.
-
 $("#loginBtn").on('click', function () {
     localStorage.setItem(currentWindowStorageName, window.location.href);
 });
 
 function updateUI(userLoggedIn, userRole) {
     if (userLoggedIn) {
-        console.log("Update UI To show User Stuff");
         // Show all user ui stuff
         $(".dropdownHide").css({
             "display": "inline-block"
-        })
+        })        
         $(".userProfile").css({
             "display": "inline-block",
             "width": "45px",
@@ -198,16 +195,12 @@ function updateUI(userLoggedIn, userRole) {
         $("#dropdownCaret").css({
             "display": "inline-block",
             "margin-right": "50px"
-
         })
 
         // Depending on their role...we'll update the UI appropiately.
-
     } else {
-        console.log("Update UI To hide User Stuff");
         $(".userProfile").css({
             "display": "none",
-
         })
 
         $("#loginBtn").css({
@@ -218,10 +211,9 @@ function updateUI(userLoggedIn, userRole) {
     }
 }
 
-// // TODO: Jake, you'll need to clean this up.
 $("#logOutLink").on('click', function () {
     logoutUser();
-    console.log("User has been logged out");
+    window.location.reload(true);
 })
 
 function logoutUser() {
@@ -231,6 +223,3 @@ function logoutUser() {
     localStorage.removeItem(currentUserStorageName);
     localStorage.removeItem(currentUserRoleStorageName);
 }
-
-
-
