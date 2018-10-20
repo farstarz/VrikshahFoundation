@@ -134,6 +134,7 @@ text-decoration: none;
     max-height: 100%;
     margin: auto;
 }
+#loggedInDrowndown,
 #loginDiv{
     position:absolute; 
     right: 0;
