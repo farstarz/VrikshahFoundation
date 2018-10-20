@@ -14,8 +14,8 @@
     }
 
     function toggleUserButtons(){
-        // Toggles buttons that change the flow of user registration.
-        // TODO: Update this once UI is finished.
+        $("#modal-btn").text("Register");
+        $("#userRegistrationDiv").remove();
     }
 
     function displayAdminButtons(){
