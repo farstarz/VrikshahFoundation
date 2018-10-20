@@ -2,6 +2,7 @@
 
     var admin = false;
     var activeEventId = null;
+    //displayAdminButtons();
 
     // Check if user is logged in.
     if (currentUser !== null){
@@ -253,9 +254,13 @@
         };
         var keypush = firebaseDB.DB.ref("events").push(newEvent);
         var key = keypush.getKey();
-        var startDay = startDate.format("DD")
-        var startMonth = startDate.format("MM")
-        var startYear = startDate.format("YYYY")
+        console.log(startDate);
+        var startDay = moment(startDate, "YYYY-MM-DD").format("DD")
+        var startMonth = moment(startDate, "YYYY-MM-DD").format("MM")
+        var startYear = moment(startDate, "YYYY-MM-DD").format("YYYY")
+        console.log(startDay);
+        console.log(startMonth);
+        console.log(startYear);
         firebaseDB.DB.ref("dates").child(startYear).child(startMonth).child(startDay).child(key).set(key);
         $("#new-event-title").val("");
         $("#new-event-date").val("");
