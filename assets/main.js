@@ -6,8 +6,6 @@ var currentUserRoleStorageName = "currentUserRole";
 var currentWindowStorageName = "currentWindow";
 
 // Initialize Firebase
-var firebase = require('firebase');
-
 
 var config = {
     apiKey: "AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4",
