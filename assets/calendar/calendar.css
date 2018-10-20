@@ -1,29 +1,33 @@
 #calendar {
-    max-width: 800px;
-    margin: 20px auto;
-    background: rgb(255,255,255);
-    padding: 20px;
-    border-radius: 15px;
-  }
-  #map, #newMap, #editMap {
-    height: 400px;
-    width: 680px;
-    margin: 10px;
-    position: initial;
-  }
-
-  #new-pac-input, #edit-pac-input {
-    height: 5vh;
-    left: 0;
-    display: absolute;
-  }
-
-#main-row {
-  max-width: 98vw !important;
-  /* position: absolute; */
+  max-width: 800px;
+  margin: 20px auto;
+  background: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 15px;
 }
 
-#add-col, #edit-col {
+#map,
+#newMap,
+#editMap {
+  height: 400px;
+  width: 680px;
+  margin: 10px;
+  position: initial;
+}
+
+#new-pac-input,
+#edit-pac-input {
+  height: 5vh;
+  left: 0;
+  display: absolute;
+}
+
+#main-row {
+  max-width: 150vw !important;
+}
+
+#add-col,
+#edit-col {
   display: none;
   background: white;
   margin: 20px auto;
