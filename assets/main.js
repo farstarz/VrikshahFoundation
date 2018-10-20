@@ -6,6 +6,9 @@ var currentUserRoleStorageName = "currentUserRole";
 var currentWindowStorageName = "currentWindow";
 
 // Initialize Firebase
+var firebase = require('firebase');
+
+
 var config = {
     apiKey: "AIzaSyDeDvTkvePDm7W3uut813oSYJ_tMi6kik4",
     authDomain: "vrikshahfoundation-afc36.firebaseapp.com",
@@ -217,7 +220,7 @@ function updateUI(userLoggedIn, userRole) {
     }
 }
 
-// TODO: Jake, you'll need to clean this up.
+// // TODO: Jake, you'll need to clean this up.
 $("#logOutLink").on('click', function () {
     logoutUser();
     console.log("User has been logged out");
@@ -230,3 +233,6 @@ function logoutUser() {
     localStorage.removeItem(currentUserStorageName);
     localStorage.removeItem(currentUserRoleStorageName);
 }
+
+
+
