@@ -36,9 +36,9 @@
 .navBig{
     display: static;
     width: auto;
-    margin-left: auto;
-
+    margin: auto;
 }
+
 .navSmall {
     width: 100%;
     display: none;
@@ -125,6 +125,18 @@ text-decoration: none;
 }
 .socialContact i {
     padding-right: 10px;
+}
+.carousel-item {
+    height: 500px;
+}
+.carousel-pic{
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+#loginDiv{
+    position:absolute; 
+    right: 0;
 }
 
 @media only screen and (max-width: 1000px) {

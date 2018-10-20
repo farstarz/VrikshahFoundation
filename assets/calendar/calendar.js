@@ -1,8 +1,7 @@
  $(document).ready(function () {
 
-    var admin = true;
+    var admin = false;
     var activeEventId = null;
-    displayAdminButtons();
 
     // Check if user is logged in.
     if (currentUser !== null){
@@ -21,6 +20,7 @@
 
     function displayAdminButtons(){
         // Show admin buttons.
+        console.log("testing");
         $("#admin-add-event-btn").removeClass("d-none");
         $("#edit-event-btn").removeClass("d-none");
     }
