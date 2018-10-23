@@ -82,13 +82,15 @@
     <!-- Main-->
 
     <div class="mainContent">
-        <div class="container text-center row" id="main-row">
+        <div class="container row" id="main-row">
             <div class="col-xl-3" id="empty"></div>
             <br>
             <div class="col-xl-6">
                 <div id='calendar'></div>
                 <br>
-                <button id="admin-add-event-btn" class="admin btn btn-success d-none" type="button">Add New Event</button>
+                <div class="text-center">
+                    <button id="admin-add-event-btn" class="admin btn btn-success d-none" type="button">Add New Event</button>
+                </div>
             </div>
 
             <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -96,41 +98,41 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Event</h5>
+                            <h3 id="event-title">Event</h3>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <h1 id="event-title">Title</h1>
-                        <p id="start-time">Start</p>
-                        <p id="end-time">End</p>
-                        <p id="description">Description</p>
-                        <p id="address">Address</p>
-                        <div id="map"></div>
-                        <br>
-                        <div class="form-group" id="userRegistrationDiv">
-                            <p>Sign up:</p>
-                            <label for="userEmail">Name:</label>
-                            <input type="text" class="form-control" id="userName" placeholder="Enter your name">
-                            <label for="userEmail">Email:</label>
-                            <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp"
-                                placeholder="Enter email">
-                            <div class='d-none invalid-feedback'>You must use a valid email!</div>
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with
-                                anyone else.</small>
-                        </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="emailReminderOn">
-                            <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
-                        </div>
-                        <div class="row text-center">
-                            <div class="col-sm-12">
-                                <button id="close-btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                <button id="modal-btn" type="button" class="btn btn-primary">Submit</button>
-                                <button id="edit-event-btn" type="button" class="btn btn-primary admin d-none"
-                                    data-dismiss="modal">Edit</button>
+                        <div class="modal-body">
+                            <p id="description">Description</p>
+                            <p>Start Time: <span id="start-time"></span></p>
+                            <p>End Time: <span id="end-time"></span></p>
+                            <p>Location: <span id="address"></span></p>
+                            <div id="map"></div>
+                            <br>
+                            <div class="form-group" id="userRegistrationDiv">
+                                <p>Register for this event with your name and email!</p>
+                                <label for="userEmail">Name:</label>
+                                <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                                <label for="userEmail">Email:</label>
+                                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                <div class='invalid-feedback'>You must enter an email to register!</div>
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="emailReminderOn" checked>
+                                <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-sm-12">
+                                    <button id="close-btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                    <button id="modal-btn" type="button" class="btn btn-primary">Register</button>
+                                    <button id="edit-event-btn" type="button" class="btn btn-primary admin d-none"
+                                        data-dismiss="modal">Edit</button>
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

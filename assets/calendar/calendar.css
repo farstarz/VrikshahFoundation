@@ -11,8 +11,13 @@
 #editMap {
   height: 400px;
   width: 680px;
-  margin: 10px;
   position: initial;
+  margin: auto;
+}
+
+#userName,
+#userEmail{
+  max-width: 350px;
 }
 
 #new-pac-input,
