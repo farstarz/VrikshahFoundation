@@ -1,3 +1,2 @@
 .DS_Store
-./assets/node_modules/
-./assets/firebase/functions/node_modules/
+./node_modules/
