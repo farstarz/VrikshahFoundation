@@ -5,7 +5,15 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+<<<<<<< HEAD
     "start": "node app.js"
+=======
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+>>>>>>> 653c57dc12b91543dd797456e299e9d919034d1e
   },
   "repository": {
     "type": "git",
@@ -23,9 +31,13 @@
   },
   "homepage": "https://github.com/farstarz/VrikshahFoundation#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.0.3",
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "firebase": "^5.5.4"
-  }
+  },
+  "private": true
 }
