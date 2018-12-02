@@ -1,8 +1,7 @@
  $(document).ready(function () {
 
-    var admin = true;
+    var admin = false;
     var activeEventId = null;
-    displayAdminButtons();
 
     // Check if user is logged in.
     if (currentUser !== null){
@@ -15,8 +14,8 @@
     }
 
     function toggleUserButtons(){
-        // Toggles buttons that change the flow of user registration.
-        // TODO: Update this once UI is finished.
+        $("#modal-btn").text("Register");
+        $("#userRegistrationDiv").remove();
     }
 
     function displayAdminButtons(){
@@ -57,9 +56,9 @@
             if (!admin) $("#edit-event-btn").hide();
             $("#event-title").text(calEvent.title);
             $("#start-time").text(calEvent.start);
-            $("#start-time").text("Start time: " + $("#start-time").text());
+            $("#start-time").text($("#start-time").text());
             $("#end-time").text(calEvent.end);
-            $("#end-time").text("End time: "+$("#end-time").text());
+            $("#end-time").text($("#end-time").text());
             $("#description").text(calEvent.description);
             $("#edit-event-btn").attr("data-value", calEvent.id);
             $("#edit-event-btn").attr("data-index", calEvent.index);            
@@ -374,13 +373,24 @@
        if (currentUser === null){
            userEmail = $("#userEmail").val();
            reminderOn = $("#emailReminderOn").is(":checked");
+           
+           if (userEmail === ""){
+               // User did not enter an email and therefore cannot register for the event.
+               $("#userEmail").addClass("is-invalid");
+               return;
+           }
        } else {
            userEmail = currentUser.email;
            reminderOn = currentUser.notificationsOn
        }
 
-       // PRODUCTION
+       // Register user for event and close the modal.
        firebaseDB.registerUserForEvent(userEmail, activeEventId, reminderOn);
        $("#myModal").modal('toggle');
+    });
+
+    // Listens for the event modal to be closed to reset any validation.
+    $("#myModal").on('hidden.bs.modal', function () {
+        $("#userEmail").removeClass("is-invalid");
     });
 });
