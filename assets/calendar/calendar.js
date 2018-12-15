@@ -1,5 +1,5 @@
  $(document).ready(function () {
-
+            
     var admin = false;
     var activeEventId = null;
 
@@ -11,6 +11,10 @@
             displayAdminButtons();
             admin = true;
         }
+    }
+    if (!admin){
+        $("#admin-add-event-btn").remove();
+        $("#edit-event-btn").remove();
     }
 
     function toggleUserButtons(){
@@ -238,6 +242,9 @@
         var startTime = $("#new-event-time").val();
         var endDate = $("#new-event-end-date").val();
         var endTime = $("#new-event-end-time").val();
+        if (!title || !description || !startDate || !startTime || !endDate || !endTime || !placeid){
+            return;
+        }
         $("#empty").show();
         $("#add-col").hide();
         var dateString = startDate + " " + startTime;

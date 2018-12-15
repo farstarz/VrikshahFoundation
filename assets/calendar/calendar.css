@@ -9,7 +9,7 @@
 #map,
 #newMap,
 #editMap {
-  height: 400px;
+  height: 350px;
   width: 680px;
   position: initial;
   margin: auto;
@@ -36,4 +36,9 @@
   display: none;
   background: white;
   margin: 20px auto;
+  border-radius: 10px;
+}
+
+button {
+  margin: 10px;
 }

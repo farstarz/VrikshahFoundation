@@ -50,10 +50,10 @@
         <!--Mobile-->
         <div class="nav">
             <div class="dropdown navSmall">
-                <btn class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                <button class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <i class="fas fa-bars"></i>
-                </btn>
+                </button>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="nav-link" href="../calendar/calendar.html">calendar</a>
@@ -110,17 +110,17 @@
                             <p>Location: <span id="address"></span></p>
                             <div id="map"></div>
                             <br>
-                            <div class="form-group" id="userRegistrationDiv">
+                            <div class="form-group needs-validation" id="userRegistrationDiv">
                                 <p>Register for this event with your name and email!</p>
                                 <label for="userEmail">Name:</label>
-                                <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                                <input type="text" class="form-control" id="userName" placeholder="Enter your name" required>
                                 <label for="userEmail">Email:</label>
-                                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                <input type="email" class="form-control" id="userEmail" aria-describedby="emailHelp" placeholder="Enter email" required>
                                 <div class='invalid-feedback'>You must enter an email to register!</div>
                                 <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                             </div>
                             <div class="form-group form-check">
-                                <input type="checkbox" class="form-check-input" id="emailReminderOn" checked>
+                                <input type="checkbox" class="form-check-input" id="emailReminderOn" checked required>
                                 <label class="form-check-label" for="emailReminderOn">Send me an email reminder</label>
                             </div>
                             <div class="row text-center">
@@ -142,50 +142,48 @@
                 <div class="temp-dialog temp-lg">
                     <div class="temp-content">
                         <h2 class="m-3">Create New Event</h2>
-                        <div class="form-group">
+                        <div class="form-group needs-validation">
                             <label for="title">Event Title:</label>
-                            <input type="text" class="form-control" id="new-event-title">
+                            <input type="text" class="form-control" id="new-event-title" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group needs-validation">
                             <label for="new-event-description">Event Description:</label>
-                            <input type="text" class="form-control" id="new-event-description">
+                            <input type="text" class="form-control" id="new-event-description" required>
                         </div>
 
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="new-event-date">Event Start Date:</label>
-                                        <input type="date" class="form-control" id="new-event-date">
+                                        <input type="date" class="form-control" id="new-event-date" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="new-event-time">Event Start Time:</label>
-                                        <input type="time" class="form-control" id="new-event-time">
+                                        <input type="time" class="form-control" id="new-event-time" required>
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group needs-validation">
                                             <label for="new-event-end-date">Event End Date:</label>
-                                            <input type="date" class="form-control" id="new-event-end-date">
+                                            <input type="date" class="form-control" id="new-event-end-date" required>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group needs-validation">
                                             <label for="new-event-end-time">Event End Time:</label>
-                                            <input type="time" class="form-control" id="new-event-end-time">
+                                            <input type="time" class="form-control" id="new-event-end-time" required>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <input id="new-pac-input" class="controls" type="text" placeholder="Search Box">
+                            <input id="new-pac-input" class="controls" type="text" placeholder="Search Box" required>
                             <div id="newMap"></div>
                         </div>
                         <div class="row text-center">
                             <div class="col-sm-12">
                                 <button id="dont-add-event-btn" type="button" class="btn btn-primary" data-dismiss="temp">Cancel</button>
-                                <button id="add-event-btn" type="button" class="btn btn-primary">Add Event</button>
+                                <button id="add-event-btn" type="submit" class="btn btn-primary">Add Event</button>
                             </div>
                         </div>
                     </div>
@@ -196,47 +194,47 @@
                 <div class="temp-dialog temp-lg">
                     <div class="temp-content">
                         <h2 class="m-3">Edit Event</h2>
-                        <div class="form-group">
+                        <div class="form-group needs-validation">
                             <label for="edit-event-title">Event Title:</label>
-                            <input type="text" class="form-control" id="edit-event-title">
+                            <input type="text" class="form-control" id="edit-event-title" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group needs-validation">
                             <label for="edit-event-description">Event Description:</label>
-                            <input type="text" class="form-control" id="edit-event-description">
+                            <input type="text" class="form-control" id="edit-event-description" required>
                         </div>
 
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="edit-event-date">Start Event Date:</label>
-                                        <input type="date" class="form-control" id="edit-event-date">
+                                        <input type="date" class="form-control" id="edit-event-date" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="edit-event-time">Start Event Time:</label>
-                                        <input type="time" class="form-control" id="edit-event-time">
+                                        <input type="time" class="form-control" id="edit-event-time" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="edit-event-end-date">End Event Date:</label>
-                                        <input type="date" class="form-control" id="edit-event-end-date">
+                                        <input type="date" class="form-control" id="edit-event-end-date" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group needs-validation">
                                         <label for="edit-event-end-time">End Event Time:</label>
-                                        <input type="time" class="form-control" id="edit-event-end-time">
+                                        <input type="time" class="form-control" id="edit-event-end-time" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <input id="edit-pac-input" class="controls" type="text" placeholder="Search Box">
+                            <input id="edit-pac-input" class="controls" type="text" placeholder="Search Box" required>
                             <div id="editMap"></div>
                         </div>
                         <div class="row text-center">
                             <div class="col-sm-12">
                                 <button id="cancel-btn" type="button" class="btn btn-primary" data-dismiss="temp">Cancel</button>
-                                <button id="submit-edit-event-btn" type="button" class="btn btn-primary">Submit changes</button>
+                                <button id="submit-edit-event-btn" type="submit" class="btn btn-primary">Submit changes</button>
                             </div>
                         </div>
                     </div>
