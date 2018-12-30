@@ -94,6 +94,8 @@ p, a {
 }
 .mainContent {
     padding-top: 75px;
+}
+.introContent {
     background-image: url("images/backgroundVF.jpg");
     height: 1000px;
 
@@ -103,7 +105,6 @@ p, a {
     background-repeat: no-repeat;
     background-size: cover;
 }
-
 .foot {
     height: 50px;
     background-color: #fff;

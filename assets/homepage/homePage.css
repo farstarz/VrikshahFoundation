@@ -9,7 +9,15 @@
     border-radius: 15px;
 }
 .aboutUs {
-    background-color:  rgba(242,239,233,.8);
+    /* background-color:  rgba(242,239,233,.8); */
     border-radius: 15px;
   
+}
+.section-heading {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-size: 3em;
+}
+.section-content {
+    font-size: 1.6em;
 }
