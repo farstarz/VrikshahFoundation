@@ -5,17 +5,16 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-<<<<<<< HEAD
-    "start": "node app.js"
-=======
+
+    "start": "node app.js",
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
->>>>>>> 653c57dc12b91543dd797456e299e9d919034d1e
+
   },
-  "repository": {
+  "repository": { 
     "type": "git",
     "url": "git+https://github.com/farstarz/VrikshahFoundation.git"
   },
