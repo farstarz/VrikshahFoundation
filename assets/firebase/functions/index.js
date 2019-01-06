@@ -5,8 +5,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 // initialize moment.js for date functions
-var moment = require('moment');
-moment().format();
+var moment = require('moment-timezone');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -114,24 +113,24 @@ exports.welcomeEmail = functions.database.ref('users/{userID}').onCreate((snapsh
 
 
 //trigger time
-var timeNow = moment();
+var timeNow = moment().tz('Asia/Colombo').format();
 var yyyy= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("YYYY");
 var mm= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("MM");
 var dd= moment(timeNow,"YYYY-MM-DDTHH:mm:ss.SSS").format("DD");
 // get the next day
 dd = parseInt(dd)+1;
 
+console.log(timeNow);
 // Sends Email Notification Reminder to attendees 24 hours before event
-exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"+dd).onWrite((snapshot, context)=> {    
-  if (snapshot.after._data.testID == true) {     // if testID was changed (if today's date is 24 hours before an event)
+exports.sendEmailNotification2 = functions.https.onRequest((request, response) => {
+  response= admin.database().ref("/dates/"+yyyy+"/"+mm+"/"+dd).once("value",(snapshot)=> {    
+    // console.log(`year: ${yyyy}, month: ${mm}, date: ${dd}`);
+    // console.log(snapshot.val());
+    // console.log(snapshot);
     var eventIDArr = [];
     // begin send email function
-    var o = snapshot.after._data;
+    var o = snapshot.val();
     eventIDArr = Object.keys(o);                 // array holds all event IDs of events occuring tomorrow
-
-    // remove testID from the event ID list (used only for trigger purposes)
-    eventIDArr.splice(-1,1);
-    
     // for each event occuring tomorrow, grab list of attendees
     eventIDArr.forEach((eventID)=>{
       var emailObjArr =[]; //email object array
@@ -142,12 +141,10 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
           function encodeEmail(string) {	
             return string.replace(/\%2E/g, '.');
           }  
-
           // get users for each eventID
           if(snapshot){   // if snapshot exists
             var emailObj = snapshot.val();
             console.log(emailObj);
-
             var emailList = [];
             Object.keys(emailObj).forEach((email)=>{
               var notification = emailObj[email];
@@ -155,14 +152,12 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
                 emailList.push(email);
               } // end if notification
             });
-
             var i = 0;
             emailList.forEach((email)=>{
               emailList[i] = encodeEmail(email);
               i++;
             }); // end forEach in emailliST
             console.log(emailList);
-
             // populate array of objects of {recipient: email}
             emailList.forEach((recipient)=>{    // emailList structure: ['mlhe@ucdavis.edu', 'vaibhav.pandey9890@gmail.com']  
               var recipientObj = {
@@ -170,7 +165,6 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
               } // end recipientObj
               emailObjArr.push(recipientObj);
             }); // end for each recipient
-            
             // return get event information
             return admin.database().ref('/events/' + eventID+'/').once('value', (snapshot) => {
               if(snapshot){
@@ -178,11 +172,9 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
                 var startTime= moment(eventInfo.start,"YYYY-MM-DDTHH:mm:ss").format("HH:mm");
                 console.log(startTime);
                 eventInfo.start = startTime;
-                
                 // send email using pepipost API
                 function pepipost(){
                   var http = require("http");
-                  
                   var options = {
                     "method": "POST",
                     "hostname": "api.pepipost.com",
@@ -223,7 +215,6 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
                   return (0);
                 }
                 return pepipost();
-
               } else {
                 return (0);
               }
@@ -239,11 +230,8 @@ exports.sendEmailNotification = functions.database.ref("/dates/"+yyyy+"/"+mm+"/"
       return returnNotification(eventID)// end return
     });  // end forEach EventID
     return(0);
-  }// end main if (testID == true) 
-  else{
-    return (0);
-  }
-  
-}); 
+
+  }); 
+});
 
 

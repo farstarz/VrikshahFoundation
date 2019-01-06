@@ -9,7 +9,7 @@
     "start": "node app.js",
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
-    "start": "npm run shell",
+    "start": "node app.js",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
 
